@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduFin SQL Business Challenge | Executive Pretraining</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c5f7d;
+            --primary-light: #4a7fa0;
+            --accent: #5d9cb8;
+            --bg-main: #f8fafb;
+            --bg-card: #ffffff;
+            --text-primary: #1a3a4a;
+            --text-secondary: #5a6c77;
+            --text-muted: #8b98a3;
+            --border: #e1e8ed;
+            --code-bg: #f5f7f9;
+            --code-border: #d9e2e9;
+            --success: #52a788;
+            --warning: #d68e3f;
+            --danger: #c95d5d;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 10em;
+            color: rgba(0, 0, 0, 0.04);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+            font-weight: 800;
+            font-family: 'Arial Black', sans-serif;
+            letter-spacing: 5px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-main);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Sidebar */
+        aside {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 32px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+            padding: 0 24px;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 10px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: var(--code-bg);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .phase-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: var(--code-bg);
+            border-radius: 6px;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .nav-item.active .phase-number {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        main {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 48px 60px 100px;
+            max-width: 1200px;
+        }
+
+        section {
+            display: none;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .level-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .level-1 {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .level-2 {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .level-3 {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .level-4 {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .level-5 {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            padding: 16px;
+            background: var(--code-bg);
+            border-left: 3px solid var(--accent);
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .card-description strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--code-border);
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 16px 0;
+        }
+
+        code {
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            color: var(--text-primary);
+        }
+
+        .sql-comment {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .sql-keyword {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Code Container with Line Numbers */
+        .code-container {
+            display: flex;
+            background: var(--code-bg);
+            border: 1px solid var(--code-border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .line-numbers {
+            background: #e8edf2;
+            padding: 20px 12px;
+            text-align: right;
+            color: var(--text-muted);
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            user-select: none;
+            border-right: 1px solid var(--code-border);
+            min-width: 45px;
+        }
+
+        .code-container pre {
+            margin: 0;
+            border: none;
+            border-radius: 0;
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Anti-patterns Section */
+        .antipattern-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+            border: 2px solid #ffcccc;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .antipattern-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #c53030;
+            margin-bottom: 16px;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .comparison-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid;
+        }
+
+        .comparison-card.bad {
+            border-color: #fc8181;
+        }
+
+        .comparison-card.good {
+            border-color: #68d391;
+        }
+
+        .comparison-card h4 {
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 18px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .alert-icon {
+            font-size: 20px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .alert-warning {
+            background: #fff8e1;
+            border-color: var(--warning);
+            color: #8d5e00;
+        }
+
+        .alert-danger {
+            background: #ffebee;
+            border-color: var(--danger);
+            color: #8b1e1e;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            border-color: #1565c0;
+            color: #0d47a1;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            border-color: var(--success);
+            color: #1b5e20;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background: var(--code-bg);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .data-table tr:hover td {
+            background: var(--code-bg);
+        }
+
+        /* Lists */
+        ul,
+        ol {
+            padding-left: 24px;
+            margin: 16px 0;
+        }
+
+        li {
+            margin: 8px 0;
+            color: var(--text-secondary);
+        }
+
+        li strong {
+            color: var(--text-primary);
+        }
+
+        /* Practice Section */
+        .practice-box {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border: 2px solid #667eea40;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .practice-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 20px 60px;
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Key Concepts Box */
+        .key-concepts {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .key-concepts-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-concepts ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-concepts li {
+            padding-left: 24px;
+            position: relative;
+            margin: 12px 0;
+        }
+
+        .key-concepts li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            aside {
+                transform: translateX(-100%);
+            }
+
+            main {
+                margin-left: 0;
+            }
+
+            footer {
+                left: 0;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+        /* Domain Concept Cards - Engineer's Lens Upgrade */
+        .domain-concept-card {
+            background: #fdfdfd;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .domain-concept-card::before {
+            content: "ENGINEER'S LENS";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #475569;
+            color: #f8fafc;
+            padding: 4px 12px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .domain-concept-card h4 {
+            color: #334155;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .concept-item {
+            font-size: 14px;
+        }
+
+        .concept-item label {
+            display: block;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .concept-item p {
+            color: #1e293b;
+            margin: 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="watermark">SkillAI Path</div>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">EF</div>
+                <h1>EduFin SQL Business Challenge</h1>
+            </div>
+            <div class="header-meta">
+                <span>Executive Pretraining</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside>
+        <div class="nav-section">
+            <div class="nav-title">Getting Started</div>
+            <a class="nav-item active" data-section="introduction">
+                <span class="phase-number">●</span>Introduction
+            </a>
+            <a class="nav-item" data-section="setup">
+                <span class="phase-number">⚙</span>Setup & Data Dictionary
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-title">The 5 Phases</div>
+            <a class="nav-item" data-section="phase1">
+                <span class="phase-number">1</span>Financial Aggregation
+            </a>
+            <a class="nav-item" data-section="phase2">
+                <span class="phase-number">2</span>Geographic Risk Analysis
+            </a>
+            <a class="nav-item" data-section="phase3">
+                <span class="phase-number">3</span>Customer Segmentation
+            </a>
+            <a class="nav-item" data-section="phase4">
+                <span class="phase-number">4</span>Institutional Analysis
+            </a>
+            <a class="nav-item" data-section="phase5">
+                <span class="phase-number">5</span>Time Intelligence
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-title">Resources</div>
+            <a class="nav-item" data-section="best-practices">
+                <span class="phase-number">★</span>SQL Best Practices
+            </a>
+            <a class="nav-item" data-section="antipatterns">
+                <span class="phase-number">❌</span>Anti-Patterns
+            </a>
+            <a class="nav-item" data-section="cheatsheet">
+                <span class="phase-number">◆</span>Quick Reference
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Introduction Section -->
+        <section id="introduction" class="active">
+            <div class="section-header">
+                <h2 class="section-title">The EduFin Portfolio Crisis Analysis</h2>
+                <p class="section-subtitle">Navigate a real-world financial crisis using progressive SQL logic. Master
+                    data analysis through 5 escalating phases of complexity.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Your Mission</h3>
+                </div>
+                <p style="color: var(--text-secondary); line-height: 1.8; font-size: 15px;">
+                    You are the <strong>Lead Data Analyst</strong> at EduFin, an educational loan portfolio company
+                    facing a critical financial crisis. The executive board needs answers fast, and your SQL skills are
+                    the only way to extract actionable insights from millions of records.
+                </p>
+                <p style="color: var(--text-secondary); margin-top: 16px; line-height: 1.8; font-size: 15px;">
+                    This training will take you from basic queries to advanced analytical techniques used by senior data
+                    analysts at Fortune 500 companies.
+                </p>
+            </div>
+
+            <!-- SCHEMA GATE — inserted before What You'll Learn -->
+            <div class="card" id="schema-gate" style="border: 2px solid #c0392b; margin-top: 24px;">
+                <div class="card-header"
+                    style="background: #c0392b; color: white; border-radius: 8px 8px 0 0; padding: 16px 24px;">
+                    <h3 style="margin:0; color:white;">⚠ Do This Before Phase 1 Opens</h3>
+                </div>
+                <div style="padding: 24px;">
+                    <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 20px; line-height: 1.8;">
+                        Every table in this dataset plays a specific role. Before you write a single JOIN — establish
+                        what each table actually is.</p>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Table</th>
+                                <th>Your Classification</th>
+                                <th>One question to guide you</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>loans</code></td>
+                                <td style="color:#c0392b; font-size:13px;">Fact / Dimension / ?</td>
+                                <td style="font-size:13px; color:var(--text-muted);">Does each row record an event with
+                                    a measurable value?</td>
+                            </tr>
+                            <tr>
+                                <td><code>customers</code></td>
+                                <td style="color:#c0392b; font-size:13px;">Fact / Dimension / ?</td>
+                                <td style="font-size:13px; color:var(--text-muted);">Does this table describe who a
+                                    borrower is — or what they did?</td>
+                            </tr>
+                            <tr>
+                                <td><code>institutions</code></td>
+                                <td style="color:#c0392b; font-size:13px;">Fact / Dimension / ?</td>
+                                <td style="font-size:13px; color:var(--text-muted);">Is this a lookup table or a
+                                    transaction log?</td>
+                            </tr>
+                            <tr>
+                                <td><code>payments</code></td>
+                                <td style="color:#c0392b; font-size:13px;">Fact / Dimension / ?</td>
+                                <td style="font-size:13px; color:var(--text-muted);">Can a single loan appear here
+                                    multiple times?</td>
+                            </tr>
+                            <tr>
+                                <td><code>defaults_collections</code></td>
+                                <td style="color:#c0392b; font-size:13px;">Fact / Dimension / ?</td>
+                                <td style="font-size:13px; color:var(--text-muted);">What event does each row record?
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>dim_city / dim_state</code></td>
+                                <td style="color:#c0392b; font-size:13px;">Fact / Dimension / ?</td>
+                                <td style="font-size:13px; color:var(--text-muted);">Does it contain any measures — or
+                                    is it purely context?</td>
+                            </tr>
+                            <tr style="background: #fff8e1;">
+                                <td><code>economic_indicators</code></td>
+                                <td style="color:#c0392b; font-size:13px; font-weight:bold;">⚠ Think before answering
+                                </td>
+                                <td style="font-size:13px; color:var(--text-muted); font-style:italic;">Is it Fact,
+                                    Dimension — or something that doesn't fit either category cleanly?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-warning" style="margin-top: 20px;">
+                        <span class="alert-icon"></span>
+                        <div>
+                            <strong>Before Phase 1:</strong> Write down your classifications. If any table caused you to
+                            pause — that's the one to understand first. The JOIN you'll write on Tuesday depends on this
+                            answer.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MON-FRI WEEK STRUCTURE -->
+            <div class="card" style="margin-top: 24px; border-left: 4px solid var(--primary);">
+                <div class="card-header">
+                    <h3 class="card-title"> Your Week — What Each Day Builds</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Phase</th>
+                            <th>The Core Question</th>
+                            <th>What You Must Add</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Mon</strong></td>
+                            <td>Portfolio Health</td>
+                            <td>How bad is the crisis, exactly?</td>
+                            <td>risk_tier column — your own thresholds</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tue</strong></td>
+                            <td>Geographic Risk</td>
+                            <td>Where is the money going?</td>
+                            <td>exposure_rank — rate × exposure combined</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Wed</strong></td>
+                            <td>Customer Segmentation</td>
+                            <td>Who do we call first?</td>
+                            <td>borrower_segment + collection_approach</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Thu</strong></td>
+                            <td>Institutional Risk</td>
+                            <td>Which partners cost us the most?</td>
+                            <td>partner_flag — two criteria, not one</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fri</strong></td>
+                            <td>Crisis Timeline</td>
+                            <td>When did this actually start?</td>
+                            <td>default_velocity + cross-phase synthesis</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="padding: 0 24px 20px; font-size: 13px; color: var(--text-muted);">Each phase builds on the
+                    previous. By Friday, your Phase 1 numbers are needed to complete the Phase 5 capstone question. Do
+                    not discard any output.</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">What You'll Learn</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Business Question</th>
+                            <th>SQL Concepts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Phase 1</strong></td>
+                            <td>How much money have we lost?</td>
+                            <td>Aggregation, Filtering, Formatting</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 2</strong></td>
+                            <td>Which cities are driving defaults?</td>
+                            <td>JOINs, GROUP BY, HAVING</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 3</strong></td>
+                            <td>Who are the high-value defaulters?</td>
+                            <td>CASE statements, Segmentation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 4</strong></td>
+                            <td>Which partners are underperforming?</td>
+                            <td>Window Functions, Ranking</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 5</strong></td>
+                            <td>When did the crisis start?</td>
+                            <td>Time Intelligence, Cohort Analysis</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">ℹ</span>
+                <div>
+                    <strong>Learning Approach:</strong> Each phase builds upon the previous one. The difficulty
+                    increases progressively from Level 1 (Discovery) to Level 5 (Advanced Analytics). Take your time to
+                    understand each concept before moving forward.
+                </div>
+            </div>
+
+            <div class="key-concepts">
+                <div class="key-concepts-title"> Why This Training is Different</div>
+                <ul>
+                    <li><strong>Real-world context:</strong> Every query solves an actual business problem</li>
+                    <li><strong>Progressive complexity:</strong> Start with SELECT, end with cohort analysis</li>
+                    <li><strong>Messy data:</strong> Learn to handle real data quality issues (typos in column names)
+                    </li>
+                    <li><strong>Executive communication:</strong> Format outputs for business stakeholders</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Setup Section -->
+        <section id="setup">
+            <div class="section-header">
+                <h2 class="section-title">Setup & Data Dictionary</h2>
+                <p class="section-subtitle">Understanding the data structure is critical. Real-world data is messy, and
+                    you must know exactly what you're working with.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Database Schema</h3>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">The EduFin database consists of 6
+                    interconnected tables. Memorize these relationships for efficient querying:</p>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Table Name</th>
+                            <th>Type</th>
+                            <th>Primary Key</th>
+                            <th>Description</th>
+                            <th>Sample Values</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>loans</strong></td>
+                            <td>Fact</td>
+                            <td>loan_id</td>
+                            <td>Core loan transactions and status</td>
+                            <td><code>loan_status</code>: 'Active', 'Defaulted', 'Closed', 'Overdue'</td>
+                        </tr>
+                        <tr>
+                            <td><strong>customers</strong></td>
+                            <td>Dimension</td>
+                            <td>customer_id</td>
+                            <td>Borrower demographics and profile</td>
+                            <td><code>employemnet_type</code>: 'Salaried', 'Self-Employed', 'Student'</td>
+                        </tr>
+                        <tr>
+                            <td><strong>institutions</strong></td>
+                            <td>Dimension</td>
+                            <td>institution_id</td>
+                            <td>Partner universities and colleges</td>
+                            <td><code>institution_type</code>: 'University', 'College', 'Institute'</td>
+                        </tr>
+                        <tr>
+                            <td><strong>dim_city</strong></td>
+                            <td>Dimension</td>
+                            <td>city_id</td>
+                            <td>City reference data</td>
+                            <td><code>city_name</code>: 'Mumbai', 'Delhi', 'Bangalore'...</td>
+                        </tr>
+                        <tr>
+                            <td><strong>dim_state</strong></td>
+                            <td>Dimension</td>
+                            <td>state_id</td>
+                            <td>State reference data</td>
+                            <td><code>state_name</code>: 'Maharashtra', 'Karnataka'...</td>
+                        </tr>
+                        <tr>
+                            <td><strong>defaults_collections</strong></td>
+                            <td>Fact</td>
+                            <td>default_id</td>
+                            <td>Recovery and collection attempts</td>
+                            <td><code>recovery_status</code>: 'Pending', 'Partial', 'Recovered'</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Join Paths (Memorize These)</h3>
+                </div>
+                <div class="key-concepts">
+                    <div class="key-concepts-title">Essential Relationships</div>
+                    <ul>
+                        <li><strong>Loan Risk:</strong> loans → customers (via customer_id)</li>
+                        <li><strong>Geography:</strong> customers → dim_city → dim_state (via city_id, state_id)</li>
+                        <li><strong>Recovery:</strong> loans → defaults_collections (via loan_id)</li>
+                        <li><strong>Strategy:</strong> loans → institutions (via institution_id)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert alert-danger">
+                <span class="alert-icon">⚠</span>
+                <div>
+                    <strong>CRITICAL: Data Quality Warnings</strong><br><br>
+                    The Engineering team provided V1 CSVs with header typos. Your queries <strong>MUST</strong> match
+                    these exact column names or they will fail:
+                    <br><br>
+                    <strong>Customers Table:</strong>
+                    <ul style="margin-top: 12px;">
+                        <li>❌ <code>employment_type</code> → ✓ <code>employemnet_type</code> (extra 'e')</li>
+                        <li>❌ <code>education_level</code> → ✓ <code>eduction_level</code> (missing 'a')</li>
+                    </ul>
+                    <br>
+                    <strong>Defaults Table:</strong>
+                    <ul style="margin-top: 12px;">
+                        <li>❌ <code>contact_attempts</code> → ✓ <code>contact_attampts</code> ('a' vs 'e')</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <div class="practice-title"> Pro Tip: Always Explore First</div>
+                <p style="color: var(--text-secondary); margin-top: 8px;">Before writing complex queries, run
+                    <code>SELECT TOP 10 * FROM table_name</code> to inspect the structure. This is how professional
+                    analysts avoid errors.
+                </p>
+            </div>
+        </section>
+
+        <!-- Phase 1 -->
+        <section id="phase1">
+            <div class="section-header">
+                <h2 class="section-title">Phase 1: Financial Aggregation</h2>
+                <p class="section-subtitle">The Board asks: "How much money have we actually lost? Is it ₹10 Crores or
+                    ₹50 Crores?"</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-1">Concept</span>
+                    <h3 class="card-title">COUNT, SUM, AVG — The Foundation</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> Before you can answer "how bad is the crisis?" you need to
+                    aggregate data. Aggregation means collapsing many rows into one summary number.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6</div>
+                    <pre><code><span class="sql-comment">-- Generic pattern: aggregate a table</span>
+<span class="sql-keyword">SELECT</span>
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> total_rows,
+    <span class="sql-keyword">SUM</span>(amount_column) <span class="sql-keyword">AS</span> total_value,
+    <span class="sql-keyword">AVG</span>(amount_column) <span class="sql-keyword">AS</span> average_value
+<span class="sql-keyword">FROM</span> your_table;</code></pre>
+                </div>
+                <div class="key-concepts">
+                    <div class="key-concepts-title">Key Points</div>
+                    <ul>
+                        <li><strong>COUNT(*)</strong> counts all rows including NULLs; <strong>COUNT(column)</strong>
+                            excludes NULLs</li>
+                        <li><strong>SUM</strong> and <strong>AVG</strong> ignore NULLs automatically</li>
+                        <li>Always filter with <strong>WHERE</strong> before aggregating to exclude bad data</li>
+                        <li>Use <strong>ROUND(value, 2)</strong> to present numbers cleanly to executives</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-2">Concept</span>
+                    <h3 class="card-title">Conditional Aggregation with CASE WHEN</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> Instead of writing separate queries for each category, use
+                    CASE WHEN inside COUNT or SUM to get multiple metrics in one pass.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
+                    <pre><code><span class="sql-comment">-- Count rows by category in a single query</span>
+<span class="sql-keyword">SELECT</span>
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> total,
+    <span class="sql-keyword">COUNT</span>(<span class="sql-keyword">CASE WHEN</span> status = <span class="sql-string">'Active'</span> <span class="sql-keyword">THEN</span> 1 <span class="sql-keyword">END</span>) <span class="sql-keyword">AS</span> active_count,
+    <span class="sql-keyword">COUNT</span>(<span class="sql-keyword">CASE WHEN</span> status = <span class="sql-string">'Closed'</span> <span class="sql-keyword">THEN</span> 1 <span class="sql-keyword">END</span>) <span class="sql-keyword">AS</span> closed_count,
+    <span class="sql-keyword">ROUND</span>(<span class="sql-keyword">COUNT</span>(<span class="sql-keyword">CASE WHEN</span> status = <span class="sql-string">'Closed'</span> <span class="sql-keyword">THEN</span> 1 <span class="sql-keyword">END</span>) * 100.0 / <span class="sql-keyword">COUNT</span>(*), 2) <span class="sql-keyword">AS</span> closure_rate_pct
+<span class="sql-keyword">FROM</span> your_table
+<span class="sql-keyword">WHERE</span> created_date <span class="sql-keyword">IS NOT NULL</span>;</code></pre>
+                </div>
+                <div class="alert alert-info">
+                    <span class="alert-icon">SIGNAL</span>
+                    <div><strong>Why this matters for Phase 1:</strong> You'll need to count and sum across different
+                        loan statuses in a single query. Think about how CASE WHEN lets you do this without multiple
+                        queries.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-3">Concept</span>
+                    <h3 class="card-title">Converting to Business Units (Crores / Lakhs)</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> Raw rupee numbers are unreadable for executives. Division
+                    converts them to meaningful units.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5</div>
+                    <pre><code><span class="sql-comment">-- Convert raw values to business-readable units</span>
+<span class="sql-keyword">SELECT</span>
+    <span class="sql-keyword">ROUND</span>(<span class="sql-keyword">SUM</span>(amount) / 10000000.0, 2) <span class="sql-keyword">AS</span> total_crores,
+    <span class="sql-keyword">ROUND</span>(<span class="sql-keyword">AVG</span>(amount) / 100000.0, 2) <span class="sql-keyword">AS</span> avg_lakhs
+<span class="sql-keyword">FROM</span> your_table;</code></pre>
+                </div>
+                <div class="practice-box">
+                    <div class="practice-title">Your Phase 1 Focus</div>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Combine COUNT, SUM, CASE WHEN, ROUND, and
+                        WHERE into one clean executive-ready query that answers: how many loans, how much disbursed, how
+                        many defaulted, and what is the default rate %?</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section id="phase2">
+            <div class="section-header">
+                <h2 class="section-title">Phase 2: Geographic Risk Analysis</h2>
+                <p class="section-subtitle">The Board asks: "Are the defaults coming from everywhere, or just specific
+                    cities?"</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-1">Concept</span>
+                    <h3 class="card-title">INNER JOIN — Connecting Tables</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> When data is spread across multiple tables, JOIN connects
+                    them through matching keys. You must understand the relationship before writing a join.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
+                    <pre><code><span class="sql-comment">-- Basic INNER JOIN: only rows with matches in both tables</span>
+<span class="sql-keyword">SELECT</span>
+    a.id,
+    a.name,
+    b.category
+<span class="sql-keyword">FROM</span> table_a a
+<span class="sql-keyword">INNER JOIN</span> table_b b
+    <span class="sql-keyword">ON</span> a.foreign_key = b.primary_key;</code></pre>
+                </div>
+                <div class="key-concepts">
+                    <div class="key-concepts-title">Multi-Table Join Pattern</div>
+                    <ul>
+                        <li>Start from your <strong>fact table</strong> (transactions, loans, orders)</li>
+                        <li>Join to <strong>dimension tables</strong> one level at a time: table_a → table_b → table_c
+                        </li>
+                        <li>Each JOIN needs an <strong>ON clause</strong> matching the correct key columns</li>
+                        <li>Use short table aliases (l, c, dc) for readability</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-2">Concept</span>
+                    <h3 class="card-title">GROUP BY and HAVING</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> GROUP BY collapses rows into groups. HAVING filters those
+                    groups after aggregation — it is WHERE for groups.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</div>
+                    <pre><code><span class="sql-comment">-- Group by a dimension, filter groups with HAVING</span>
+<span class="sql-keyword">SELECT</span>
+    region,
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> total_transactions,
+    <span class="sql-keyword">SUM</span>(amount) <span class="sql-keyword">AS</span> total_amount
+<span class="sql-keyword">FROM</span> transactions
+<span class="sql-keyword">GROUP BY</span> region
+<span class="sql-keyword">HAVING</span> <span class="sql-keyword">COUNT</span>(*) >= 50  <span class="sql-comment">-- Only regions with enough data to be statistically meaningful</span>
+<span class="sql-keyword">ORDER BY</span> total_amount <span class="sql-keyword">DESC</span>;</code></pre>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">SIGNAL</span>
+                    <div><strong>WHERE vs HAVING:</strong> WHERE filters individual rows before grouping. HAVING filters
+                        groups after aggregation. You cannot use WHERE on an aggregated column — use HAVING.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-3">Concept</span>
+                    <h3 class="card-title">NULLIF — Preventing Division by Zero</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> Dividing by zero crashes a query. NULLIF returns NULL when
+                    the denominator would be zero, preventing errors.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5</div>
+                    <pre><code><span class="sql-comment">-- Safe percentage: returns NULL instead of crashing when denominator = 0</span>
+<span class="sql-keyword">SELECT</span>
+    category,
+    <span class="sql-keyword">ROUND</span>(failures * 100.0 / <span class="sql-keyword">NULLIF</span>(total, 0), 2) <span class="sql-keyword">AS</span> failure_rate_pct
+<span class="sql-keyword">FROM</span> summary_table;</code></pre>
+                </div>
+                <div class="practice-box">
+                    <div class="practice-title">Your Phase 2 Focus</div>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">JOIN the loans table to the customer and
+                        city/state dimension tables. GROUP BY city. Calculate default rate per city. Use HAVING to
+                        exclude cities with too few loans (statistical noise). Your custom column ranks cities by
+                        combined exposure and rate — think about how to combine two signals into one ranking column.</p>
+                    <div class="domain-concept-card">
+                        <h4>Domain Concept: Risk Sensitivity & Exposure Density</h4>
+                        <div class="concept-grid">
+                            <div class="concept-item">
+                                <label>Industry Anchor: Credit Provisioning</label>
+                                <p>Banks don't just care about "number of bad loans". They care about <strong>EAD (Exposure at Default)</strong>. A 10% default rate on a ₹100 Cr portfolio is a board-level crisis; the same rate on ₹10k is a rounding error.</p>
+                            </div>
+                            <div class="concept-item">
+                                <label>Workbook Tie-in (Phase 2)</label>
+                                <p>You will JOIN the Loans table to Cities. Look for the "Risk Epicentre"—the intersection of <strong>high default velocity</strong> and <strong>high absolute exposure</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 3 -->
+        <section id="phase3">
+            <div class="section-header">
+                <h2 class="section-title">Phase 3: Customer Segmentation</h2>
+                <p class="section-subtitle">The Collections Team asks: "Who are the 'High Value' defaulters we should
+                    target first?"</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-1">Concept</span>
+                    <h3 class="card-title">CASE WHEN for Bucketing</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> CASE WHEN converts raw numeric values into categorical
+                    labels. This is how analysts create segments — income tiers, risk bands, priority classes.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</div>
+                    <pre><code><span class="sql-comment">-- Create a segment label based on a numeric range</span>
+<span class="sql-keyword">SELECT</span>
+    customer_id,
+    score,
+    <span class="sql-keyword">CASE</span>
+        <span class="sql-keyword">WHEN</span> score >= 750 <span class="sql-keyword">THEN</span> <span class="sql-string">'Prime'</span>
+        <span class="sql-keyword">WHEN</span> score >= 600 <span class="sql-keyword">THEN</span> <span class="sql-string">'Standard'</span>
+        <span class="sql-keyword">ELSE</span> <span class="sql-string">'Subprime'</span>
+    <span class="sql-keyword">END AS</span> credit_segment
+<span class="sql-keyword">FROM</span> customers;</code></pre>
+                </div>
+                <div class="key-concepts">
+                    <div class="key-concepts-title">CASE Best Practices</div>
+                    <ul>
+                        <li>SQL evaluates conditions <strong>top to bottom</strong> — put the most restrictive first
+                        </li>
+                        <li>Always include an <strong>ELSE</strong> to catch unmatched rows</li>
+                        <li><strong>BETWEEN</strong> is inclusive on both ends</li>
+                        <li>You can use CASE inside COUNT() or SUM() for conditional counting</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-2">Concept</span>
+                    <h3 class="card-title">Multi-Signal Segmentation</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> Real-world segments combine multiple conditions. A customer
+                    segment is more meaningful when it reflects two or more risk signals together.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+                    <pre><code><span class="sql-comment">-- Segment using two signals combined</span>
+<span class="sql-keyword">SELECT</span>
+    customer_id,
+    <span class="sql-keyword">CASE</span>
+        <span class="sql-keyword">WHEN</span> risk_score > 80 <span class="sql-keyword">AND</span> payment_miss_count > 2 <span class="sql-keyword">THEN</span> <span class="sql-string">'Critical'</span>
+        <span class="sql-keyword">WHEN</span> risk_score > 60 <span class="sql-keyword">OR</span> payment_miss_count > 1 <span class="sql-keyword">THEN</span> <span class="sql-string">'Watch'</span>
+        <span class="sql-keyword">ELSE</span> <span class="sql-string">'Healthy'</span>
+    <span class="sql-keyword">END AS</span> borrower_segment
+<span class="sql-keyword">FROM</span> customer_risk_view
+<span class="sql-keyword">ORDER BY</span> risk_score <span class="sql-keyword">DESC</span>;</code></pre>
+                </div>
+                <div class="practice-box">
+                    <div class="practice-title">Your Phase 3 Focus</div>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Build a <code>borrower_segment</code>
+                        using at least two customer signals (CIBIL score, income, employment type, default history).
+                        Your custom column is your original priority scoring formula — combine multiple factors with
+                        weights you justify. Remember the column name typos in the customers table.</p>
+                    <div class="domain-concept-card">
+                        <h4>Domain Concept: Strategic Recovery & Risk-Based Pricing</h4>
+                        <div class="concept-grid">
+                            <div class="concept-item">
+                                <label>Industry Anchor: Basel III Framework</label>
+                                <p>Regulations require banks to hold more capital against "High Risk" segments. By identifying <strong>Income Gaps</strong> (Income < Monthly Debt), you are detecting <strong>Subprime Stress</strong> before it hits the balance sheet.</p>
+                            </div>
+                            <div class="concept-item">
+                                <label>Workbook Tie-in (Phase 3)</label>
+                                <p>Use <code>CASE WHEN</code> to create priority buckets. Don't just sort by debt; sort by <strong>Recovery Probability</strong> (CIBIL > 700) vs <strong>Liquidation Value</strong> (Loan Amount > 5L).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 4 -->
+        <section id="phase4">
+            <div class="section-header">
+                <h2 class="section-title">Phase 4: Institutional Analysis</h2>
+                <p class="section-subtitle">The Partnership Director asks: "Which universities are sending us the worst
+                    students? Rank them."</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-1">Concept</span>
+                    <h3 class="card-title">CTEs (WITH clause) — Readable Multi-Step Logic</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> A CTE (Common Table Expression) is a named temporary result
+                    you can reference in the same query. It makes complex logic readable by breaking it into named
+                    steps.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11</div>
+                    <pre><code><span class="sql-comment">-- CTE pattern: define a named intermediate result, then query it</span>
+<span class="sql-keyword">WITH</span> summary <span class="sql-keyword">AS</span> (
+    <span class="sql-keyword">SELECT</span>
+        category,
+        <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> total,
+        <span class="sql-keyword">SUM</span>(failures) <span class="sql-keyword">AS</span> bad
+    <span class="sql-keyword">FROM</span> source_table
+    <span class="sql-keyword">GROUP BY</span> category
+)
+<span class="sql-keyword">SELECT</span> category, total, bad, <span class="sql-keyword">ROUND</span>(bad * 100.0 / <span class="sql-keyword">NULLIF</span>(total, 0), 2) <span class="sql-keyword">AS</span> rate
+<span class="sql-keyword">FROM</span> summary;</code></pre>
+                </div>
+                <div class="key-concepts">
+                    <div class="key-concepts-title">Why Use CTEs</div>
+                    <ul>
+                        <li>Avoids deeply nested subqueries — each step has a readable name</li>
+                        <li>The outer SELECT can reference the CTE like a normal table</li>
+                        <li>You can chain multiple CTEs: <code>WITH cte1 AS (...), cte2 AS (...)</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-2">Concept</span>
+                    <h3 class="card-title">Window Functions — RANK, DENSE_RANK, NTILE</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> Window functions compute values across rows without
+                    collapsing them. They add a ranking or running total column to each row, preserving all row detail.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+                    <pre><code><span class="sql-comment">-- Rank rows within a result set</span>
+<span class="sql-keyword">SELECT</span>
+    name,
+    score,
+    <span class="sql-keyword">RANK</span>() <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> score <span class="sql-keyword">DESC</span>) <span class="sql-keyword">AS</span> rank_position,
+    <span class="sql-keyword">DENSE_RANK</span>() <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> score <span class="sql-keyword">DESC</span>) <span class="sql-keyword">AS</span> dense_rank,
+    <span class="sql-keyword">NTILE</span>(4) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> score <span class="sql-keyword">DESC</span>) <span class="sql-keyword">AS</span> quartile
+<span class="sql-keyword">FROM</span> results;
+<span class="sql-comment">-- RANK: 1,2,2,4 (skips 3)  |  DENSE_RANK: 1,2,2,3  |  NTILE(4): divides into 4 equal buckets</span></code></pre>
+                </div>
+                <div class="practice-box">
+                    <div class="practice-title">Your Phase 4 Focus</div>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Use a CTE to compute per-institution
+                        default rate, then apply RANK() or NTILE() as your custom column to classify partners. Your
+                        <code>partner_flag</code> label (Suspend / Review / Retain) must use at least two criteria.
+                        Institutions with fewer than 50 loans should be excluded from action decisions — how will you
+                        implement that?
+                    </p>
+                    <div class="domain-concept-card">
+                        <h4>Domain Concept: Counterparty Risk & Institutional Integrity</h4>
+                        <div class="concept-grid">
+                            <div class="concept-item">
+                                <label>Industry Anchor: Third-Party Risk Management (TPRM)</label>
+                                <p>In fintech, the partner (College/Retailer) is as important as the borrower. If a partner’s defaults are <strong>3x the national average</strong>, it's not bad luck—it's likely <strong>Adverse Selection</strong> or fraud at the source.</p>
+                            </div>
+                            <div class="concept-item">
+                                <label>Workbook Tie-in (Phase 4)</label>
+                                <p>Use <strong>Correlated Subqueries</strong> to compare each institution against the global baseline. If they fail the 1.5x threshold, they move to the <code>SUSPEND</code> list.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 5 -->
+        <section id="phase5">
+            <div class="section-header">
+                <h2 class="section-title">Phase 5: Time Intelligence</h2>
+                <p class="section-subtitle">The CEO asks: "When did this crisis start? Was it a sudden spike?"</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-1">Concept</span>
+                    <h3 class="card-title">Date Functions — Extracting Time Periods</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> Individual dates are too granular for trend analysis.
+                    Convert them to months or quarters for meaningful time series.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
+                    <pre><code><span class="sql-comment">-- Group raw dates into monthly periods</span>
+<span class="sql-keyword">SELECT</span>
+    <span class="sql-keyword">FORMAT</span>(event_date, <span class="sql-string">'yyyy-MM'</span>) <span class="sql-keyword">AS</span> trend_month,
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> events_that_month
+<span class="sql-keyword">FROM</span> events_table
+<span class="sql-keyword">WHERE</span> event_date <span class="sql-keyword">IS NOT NULL</span>
+<span class="sql-keyword">GROUP BY</span> <span class="sql-keyword">FORMAT</span>(event_date, <span class="sql-string">'yyyy-MM'</span>)
+<span class="sql-keyword">ORDER BY</span> trend_month;</code></pre>
+                </div>
+                <div class="key-concepts">
+                    <div class="key-concepts-title">Format Options</div>
+                    <ul>
+                        <li><strong>'yyyy-MM'</strong> — Year-Month (2024-01)</li>
+                        <li><strong>'yyyy-Q'</strong> + DATEPART(quarter,...) — Quarter grouping</li>
+                        <li><strong>DATEPART(year,...)</strong> — Year-only grouping</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="level-badge level-2">Concept</span>
+                    <h3 class="card-title">LAG — Month-over-Month Comparison</h3>
+                </div>
+                <div class="card-description">
+                    <strong>What you need to know:</strong> LAG() is a window function that accesses the value from a
+                    previous row. Use it to calculate change from last period — essential for detecting accelerating
+                    trends.
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13</div>
+                    <pre><code><span class="sql-comment">-- LAG: compare current period to previous period</span>
+<span class="sql-keyword">SELECT</span>
+    trend_month,
+    monthly_count,
+    <span class="sql-keyword">LAG</span>(monthly_count, 1) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> trend_month) <span class="sql-keyword">AS</span> prev_month,
+    monthly_count - <span class="sql-keyword">LAG</span>(monthly_count, 1) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> trend_month) <span class="sql-keyword">AS</span> mom_change,
+    <span class="sql-keyword">CASE</span>
+        <span class="sql-keyword">WHEN</span> monthly_count > <span class="sql-keyword">LAG</span>(monthly_count, 1) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> trend_month) <span class="sql-keyword">THEN</span> <span class="sql-string">'Accelerating'</span>
+        <span class="sql-keyword">WHEN</span> monthly_count < <span class="sql-keyword">LAG</span>(monthly_count, 1) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> trend_month) <span class="sql-keyword">THEN</span> <span class="sql-string">'Improving'</span>
+        <span class="sql-keyword">ELSE</span> <span class="sql-string">'Stable'</span>
+    <span class="sql-keyword">END AS</span> trend_direction
+<span class="sql-keyword">FROM</span> monthly_summary
+<span class="sql-keyword">ORDER BY</span> trend_month;</code></pre>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">SIGNAL</span>
+                    <div><strong>Watch out:</strong> The first row has no previous row — LAG() returns NULL for it.
+                        Handle that explicitly in your output (use COALESCE or a CASE to label it 'Baseline').</div>
+                </div>
+                <div class="practice-box">
+                    <div class="practice-title">Your Phase 5 Focus</div>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Build a monthly default trend. Use LAG()
+                        to calculate month-over-month change as your <code>default_velocity</code> column. Identify the
+                        first month the default rate crossed the crisis threshold — that is your
+                        <code>crisis_onset_flag</code>. Your cohort label tags each loan by its disbursement quarter.
+                    </p>
+                    <div class="domain-concept-card">
+                        <h4>Domain Concept: Vintage Analysis & Default Velocity</h4>
+                        <div class="concept-grid">
+                            <div class="concept-item">
+                                <label>Industry Anchor: IFRS 9 Expected Credit Loss</label>
+                                <p>Modern accounting looks at <strong>Trajectory</strong>. A stable 5% rate is boring. A rate moving from 1% to 5% in 3 months is an "Incipient Crisis". This is <strong>Default Velocity</strong>.</p>
+                            </div>
+                            <div class="concept-item">
+                                <label>Workbook Tie-in (Phase 5)</label>
+                                <p>Use <code>LAG()</code> to calculate month-over-month growth. Your goal is to find the <strong>Genesis Month</strong>—the exact point where the "Scale" strategy broke the "Risk" engine.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Best Practices Section -->
+        <section id="best-practices">
+            <div class="section-header">
+                <h2 class="section-title">SQL Best Practices</h2>
+                <p class="section-subtitle">Professional patterns and techniques used by senior data analysts.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">1. Query Organization</h3>
+                </div>
+                <ul style="color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>Use CTEs (WITH clause):</strong> Break complex queries into readable steps</li>
+                    <li><strong>Table aliases:</strong> Always use short, meaningful aliases (c for customers, l for
+                        loans)</li>
+                    <li><strong>Indent consistently:</strong> Makes complex JOINs and subqueries readable</li>
+                    <li><strong>Comment liberally:</strong> Explain business logic, not SQL syntax</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">2. Performance Optimization</h3>
+                </div>
+                <ul style="color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>Filter early:</strong> WHERE clause before JOINs when possible</li>
+                    <li><strong>Index foreign keys:</strong> Dramatically speeds up JOINs</li>
+                    <li><strong>Limit SELECT *:</strong> Only retrieve columns you need</li>
+                    <li><strong>Use EXISTS vs IN:</strong> EXISTS is faster for large datasets</li>
+                    <li><strong>Avoid functions in WHERE:</strong> WHERE YEAR(date) = 2024 prevents index usage</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">3. Data Quality Checks</h3>
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14
+                    </div>
+                    <pre><code><span class="sql-comment">-- Always check for NULLs before aggregating</span>
+<span class="sql-keyword">SELECT</span> 
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> total_rows,
+    <span class="sql-keyword">COUNT</span>(column_name) <span class="sql-keyword">AS</span> non_null_rows,
+    <span class="sql-keyword">COUNT</span>(*) - <span class="sql-keyword">COUNT</span>(column_name) <span class="sql-keyword">AS</span> null_count
+<span class="sql-keyword">FROM</span> table_name;
+
+<span class="sql-comment">-- Check for duplicates</span>
+<span class="sql-keyword">SELECT</span> 
+    primary_key,
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">as</span> occurrences
+<span class="sql-keyword">FROM</span> table_name
+<span class="sql-keyword">GROUP BY</span> primary_key
+<span class="sql-keyword">HAVING</span> <span class="sql-keyword">COUNT</span>(*) > 1;</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">4. Common Pitfalls to Avoid</h3>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">SIGNAL</span>
+                    <div>
+                        <strong>Integer Division:</strong> 10 / 3 = 3 (not 3.33). Always use 10.0 / 3 for decimals.
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">SIGNAL</span>
+                    <div>
+                        <strong>NULL in comparisons:</strong> NULL = NULL is FALSE. Use IS NULL / IS NOT NULL.
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">SIGNAL</span>
+                    <div>
+                        <strong>String concatenation with NULL:</strong> 'Hello' + NULL = NULL. Use COALESCE().
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">5. Testing Strategy</h3>
+                </div>
+                <ol style="color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>Start small:</strong> Test on TOP 100 rows first</li>
+                    <li><strong>Verify JOINs:</strong> Check row counts before and after joins</li>
+                    <li><strong>Validate aggregations:</strong> Manually calculate a few rows to confirm logic</li>
+                    <li><strong>Edge cases:</strong> Test with NULL values, zero amounts, boundary dates</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Anti-Patterns Section -->
+        <section id="antipatterns">
+            <div class="section-header">
+                <h2 class="section-title">Common SQL Anti-Patterns</h2>
+                <p class="section-subtitle">Mistakes that even experienced developers make. Learn to recognize and avoid
+                    them.</p>
+            </div>
+
+            <!-- Anti-pattern 1 -->
+            <div class="antipattern-box">
+                <div class="antipattern-title">❌ Never Use DISTINCT with GROUP BY</div>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    This is redundant and shows misunderstanding of GROUP BY. GROUP BY already produces unique
+                    combinations.
+                </p>
+                <div class="comparison-table">
+                    <div class="comparison-card bad">
+                        <h4>❌ Wrong - Redundant DISTINCT</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3<br>4</div>
+                            <pre><code><span class="sql-keyword">SELECT DISTINCT</span> 
+    city_name, 
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">as</span> total
+<span class="sql-keyword">FROM</span> loans
+<span class="sql-keyword">GROUP BY</span> city_name;</code></pre>
+                        </div>
+                        <p style="margin-top: 12px; color: #c53030; font-size: 14px;">GROUP BY already ensures unique
+                            city_name values. DISTINCT is redundant and slows query.</p>
+                    </div>
+                    <div class="comparison-card good">
+                        <h4>✓ Correct - Just GROUP BY</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3<br>4</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> 
+    city_name, 
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">as</span> total
+<span class="sql-keyword">FROM</span> loans
+<span class="sql-keyword">GROUP BY</span> city_name;</code></pre>
+                        </div>
+                        <p style="margin-top: 12px; color: #16a34a; font-size: 14px;">Clean and efficient. GROUP BY
+                            handles uniqueness.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anti-pattern 2 -->
+            <div class="antipattern-box">
+                <div class="antipattern-title">❌ Using OR in JOINs</div>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    OR conditions in JOIN clauses create massive performance issues and often produce incorrect results.
+                </p>
+                <div class="comparison-table">
+                    <div class="comparison-card bad">
+                        <h4>❌ Wrong - OR in JOIN</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3<br>4<br>5</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> *
+<span class="sql-keyword">FROM</span> loans l
+<span class="sql-keyword">JOIN</span> customers c 
+    <span class="sql-keyword">ON</span> l.customer_id = c.customer_id 
+    <span class="sql-keyword">OR</span> l.backup_customer_id = c.customer_id;</code></pre>
+                        </div>
+                    </div>
+                    <div class="comparison-card good">
+                        <h4>✓ Correct - Separate Queries with UNION</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> loans l
+<span class="sql-keyword">JOIN</span> customers c 
+    <span class="sql-keyword">ON</span> l.customer_id = c.customer_id
+
+<span class="sql-keyword">UNION ALL</span>
+
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> loans l
+<span class="sql-keyword">JOIN</span> customers c 
+    <span class="sql-keyword">ON</span> l.backup_customer_id = c.customer_id;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anti-pattern 3 -->
+            <div class="antipattern-box">
+                <div class="antipattern-title">❌ SELECT * in Production Code</div>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    Never use SELECT * in application code. It's fragile, wasteful, and breaks when schema changes.
+                </p>
+                <div class="alert alert-danger">
+                    <span class="alert-icon">⚠</span>
+                    <div>
+                        <strong>Why it's bad:</strong>
+                        <ul style="margin-top: 12px;">
+                            <li>Returns unnecessary columns (network overhead)</li>
+                            <li>Breaks if column order changes</li>
+                            <li>Breaks if new columns are added</li>
+                            <li>Can't be optimized by database engine</li>
+                            <li>Makes code maintenance harder</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="comparison-table">
+                    <div class="comparison-card bad">
+                        <h4>❌ Lazy Query</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> * 
+<span class="sql-keyword">FROM</span> customers;</code></pre>
+                        </div>
+                    </div>
+                    <div class="comparison-card good">
+                        <h4>✓ Explicit Columns</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3<br>4<br>5</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> 
+    customer_id,
+    full_name,
+    annual_income
+<span class="sql-keyword">FROM</span> customers;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anti-pattern 4 -->
+            <div class="antipattern-box">
+                <div class="antipattern-title">❌ Using NOT IN with NULLs</div>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    NOT IN returns no results if the subquery contains NULL. This is a subtle bug that's hard to catch.
+                </p>
+                <div class="comparison-table">
+                    <div class="comparison-card bad">
+                        <h4>❌ Dangerous NOT IN</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3<br>4<br>5</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> * 
+<span class="sql-keyword">FROM</span> customers
+<span class="sql-keyword">WHERE</span> customer_id <span class="sql-keyword">NOT IN</span> (
+    <span class="sql-keyword">SELECT</span> customer_id 
+    <span class="sql-keyword">FROM</span> blacklisted_customers
+);</code></pre>
+                        </div>
+                        <p style="margin-top: 12px; color: #c53030; font-size: 14px;">If blacklisted_customers has ANY
+                            NULL customer_id, this returns ZERO rows!</p>
+                    </div>
+                    <div class="comparison-card good">
+                        <h4>✓ Use NOT EXISTS or Left Join</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6</div>
+                            <pre><code><span class="sql-comment">-- NOT EXISTS (safest)</span>
+<span class="sql-keyword">SELECT</span> * 
+<span class="sql-keyword">FROM</span> customers c
+<span class="sql-keyword">WHERE NOT EXISTS</span> (
+    <span class="sql-keyword">SELECT</span> 1 <span class="sql-keyword">FROM</span> blacklisted_customers b
+    <span class="sql-keyword">WHERE</span> b.customer_id = c.customer_id
+);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anti-pattern 5 -->
+            <div class="antipattern-box">
+                <div class="antipattern-title">❌ Functions on Indexed Columns in WHERE</div>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    Applying functions to indexed columns prevents index usage, causing full table scans.
+                </p>
+                <div class="comparison-table">
+                    <div class="comparison-card bad">
+                        <h4>❌ Index-Killing Query</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> loans
+<span class="sql-keyword">WHERE</span> <span class="sql-keyword">YEAR</span>(disbursement_date) = 2023
+  <span class="sql-keyword">AND</span> <span class="sql-keyword">MONTH</span>(disbursement_date) = 6;</code></pre>
+                        </div>
+                        <p style="margin-top: 12px; color: #c53030; font-size: 14px;">Functions on disbursement_date
+                            prevent index usage. Full table scan!</p>
+                    </div>
+                    <div class="comparison-card good">
+                        <h4>✓ Index-Friendly Query</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> loans
+<span class="sql-keyword">WHERE</span> disbursement_date >= <span style="color: #c2185b;">'2023-06-01'</span>
+  <span class="sql-keyword">AND</span> disbursement_date < <span style="color: #c2185b;">'2023-07-01'</span>;</code></pre>
+                        </div>
+                        <p style="margin-top: 12px; color: #16a34a; font-size: 14px;">Range comparison allows index
+                            usage. Much faster!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anti-pattern 6 -->
+            <div class="antipattern-box">
+                <div class="antipattern-title">❌ Implicit Type Conversion</div>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    Comparing different data types forces SQL to convert values, preventing index usage and causing
+                    errors.
+                </p>
+                <div class="comparison-table">
+                    <div class="comparison-card bad">
+                        <h4>❌ Type Mismatch</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2<br>3</div>
+                            <pre><code><span class="sql-comment">-- customer_id is INT</span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> customers
+<span class="sql-keyword">WHERE</span> customer_id = <span style="color: #c2185b;">'12345'</span>;  <span class="sql-comment">-- string!</span></code></pre>
+                        </div>
+                    </div>
+                    <div class="comparison-card good">
+                        <h4>✓ Correct Type</h4>
+                        <div class="code-container">
+                            <div class="line-numbers">1<br>2</div>
+                            <pre><code><span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> customers
+<span class="sql-keyword">WHERE</span> customer_id = 12345;  <span class="sql-comment">-- integer</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Performance Impact Summary</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Anti-Pattern</th>
+                            <th>Impact</th>
+                            <th>Why It's Bad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DISTINCT + GROUP BY</td>
+                            <td>Slow, wasteful</td>
+                            <td>Redundant operation, shows misunderstanding</td>
+                        </tr>
+                        <tr>
+                            <td>OR in JOIN</td>
+                            <td>Very slow</td>
+                            <td>Creates cartesian product internally</td>
+                        </tr>
+                        <tr>
+                            <td>SELECT *</td>
+                            <td>Network waste, fragile</td>
+                            <td>Transfers unneeded data, breaks on schema changes</td>
+                        </tr>
+                        <tr>
+                            <td>NOT IN with NULLs</td>
+                            <td>Incorrect results</td>
+                            <td>Returns zero rows if NULL exists in subquery</td>
+                        </tr>
+                        <tr>
+                            <td>Functions on WHERE columns</td>
+                            <td>Full table scans</td>
+                            <td>Prevents index usage completely</td>
+                        </tr>
+                        <tr>
+                            <td>Implicit type conversion</td>
+                            <td>Index bypass, errors</td>
+                            <td>Forces full scan, unpredictable behavior</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <!-- Cheatsheet Section -->
+        <section id="cheatsheet">
+            <div class="section-header">
+                <h2 class="section-title">Quick Reference Cheatsheet</h2>
+                <p class="section-subtitle">Fast lookup for common SQL patterns and syntax.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Aggregation Functions</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>Purpose</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>COUNT()</code></td>
+                            <td>Count rows</td>
+                            <td>COUNT(loan_id), COUNT(*)</td>
+                        </tr>
+                        <tr>
+                            <td><code>SUM()</code></td>
+                            <td>Total of values</td>
+                            <td>SUM(loan_amount)</td>
+                        </tr>
+                        <tr>
+                            <td><code>AVG()</code></td>
+                            <td>Average value</td>
+                            <td>AVG(annual_income)</td>
+                        </tr>
+                        <tr>
+                            <td><code>MIN() / MAX()</code></td>
+                            <td>Minimum / Maximum</td>
+                            <td>MIN(disbursement_date)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Window Functions</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>Purpose</th>
+                            <th>Syntax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>ROW_NUMBER()</code></td>
+                            <td>Sequential numbering</td>
+                            <td>ROW_NUMBER() OVER(ORDER BY col)</td>
+                        </tr>
+                        <tr>
+                            <td><code>RANK()</code></td>
+                            <td>Ranking with gaps</td>
+                            <td>RANK() OVER(ORDER BY col DESC)</td>
+                        </tr>
+                        <tr>
+                            <td><code>DENSE_RANK()</code></td>
+                            <td>Ranking without gaps</td>
+                            <td>DENSE_RANK() OVER(ORDER BY col)</td>
+                        </tr>
+                        <tr>
+                            <td><code>NTILE(n)</code></td>
+                            <td>Divide into n buckets</td>
+                            <td>NTILE(4) OVER(ORDER BY col)</td>
+                        </tr>
+                        <tr>
+                            <td><code>LAG() / LEAD()</code></td>
+                            <td>Access previous/next row</td>
+                            <td>LAG(col, 1) OVER(ORDER BY date)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">JOIN Types</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Join Type</th>
+                            <th>Returns</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>INNER JOIN</code></td>
+                            <td>Matching rows only</td>
+                            <td>Standard relationship linking</td>
+                        </tr>
+                        <tr>
+                            <td><code>LEFT JOIN</code></td>
+                            <td>All left + matches</td>
+                            <td>Keep all records from main table</td>
+                        </tr>
+                        <tr>
+                            <td><code>RIGHT JOIN</code></td>
+                            <td>All right + matches</td>
+                            <td>Rarely used (reverse LEFT JOIN)</td>
+                        </tr>
+                        <tr>
+                            <td><code>FULL OUTER JOIN</code></td>
+                            <td>All rows from both</td>
+                            <td>Find missing relationships</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Filtering Operators</h3>
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14
+                    </div>
+                    <pre><code><span class="sql-comment">-- Comparison</span>
+<span class="sql-keyword">WHERE</span> amount = 1000
+<span class="sql-keyword">WHERE</span> amount > 1000
+<span class="sql-keyword">WHERE</span> amount <span class="sql-keyword">BETWEEN</span> 1000 <span class="sql-keyword">AND</span> 5000
+
+<span class="sql-comment">-- String matching</span>
+<span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span style="color: #c2185b;">'A%'</span>        <span class="sql-comment">-- Starts with A</span>
+<span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span style="color: #c2185b;">'%son'</span>      <span class="sql-comment">-- Ends with son</span>
+<span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span style="color: #c2185b;">'%mid%'</span>     <span class="sql-comment">-- Contains mid</span>
+
+<span class="sql-comment">-- Multiple conditions</span>
+<span class="sql-keyword">WHERE</span> status <span class="sql-keyword">IN</span> (<span style="color: #c2185b;">'Active'</span>, <span style="color: #c2185b;">'Pending'</span>)
+<span class="sql-keyword">WHERE</span> value <span class="sql-keyword">IS NULL</span>
+<span class="sql-keyword">WHERE</span> value <span class="sql-keyword">IS NOT NULL</span></code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Date Functions</h3>
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20
+                    </div>
+                    <pre><code><span class="sql-comment">-- Current Date/Time</span>
+<span class="sql-keyword">GETDATE</span>()                           <span class="sql-comment">-- Current datetime</span>
+<span class="sql-keyword">GETUTCDATE</span>()                        <span class="sql-comment">-- Current UTC datetime</span>
+<span class="sql-keyword">CAST</span>(<span class="sql-keyword">GETDATE</span>() <span class="sql-keyword">AS DATE</span>)            <span class="sql-comment">-- Today's date only</span>
+
+<span class="sql-comment">-- Formatting</span>
+<span class="sql-keyword">FORMAT</span>(date_col, <span style="color: #c2185b;">'yyyy-MM-dd'</span>)       <span class="sql-comment">-- Custom format</span>
+<span class="sql-keyword">FORMAT</span>(date_col, <span style="color: #c2185b;">'yyyy-MM'</span>)          <span class="sql-comment">-- Year-Month</span>
+<span class="sql-keyword">CONVERT</span>(<span class="sql-keyword">VARCHAR</span>, date_col, 23)      <span class="sql-comment">-- YYYY-MM-DD</span>
+
+<span class="sql-comment">-- Extraction</span>
+<span class="sql-keyword">YEAR</span>(date_col), <span class="sql-keyword">MONTH</span>(date_col), <span class="sql-keyword">DAY</span>(date_col)
+<span class="sql-keyword">DATEPART</span>(<span class="sql-keyword">QUARTER</span>, date_col)         <span class="sql-comment">-- Quarter (1-4)</span>
+<span class="sql-keyword">DATEPART</span>(<span class="sql-keyword">WEEK</span>, date_col)            <span class="sql-comment">-- Week number</span>
+<span class="sql-keyword">DATENAME</span>(<span class="sql-keyword">MONTH</span>, date_col)           <span class="sql-comment">-- Month name</span>
+
+<span class="sql-comment">-- Calculations</span>
+<span class="sql-keyword">DATEADD</span>(<span class="sql-keyword">MONTH</span>, 3, date_col)         <span class="sql-comment">-- Add 3 months</span>
+<span class="sql-keyword">DATEADD</span>(<span class="sql-keyword">DAY</span>, -7, date_col)          <span class="sql-comment">-- Subtract 7 days</span>
+<span class="sql-keyword">DATEDIFF</span>(<span class="sql-keyword">DAY</span>, start, end_date)      <span class="sql-comment">-- Days between</span>
+<span class="sql-keyword">DATEDIFF</span>(<span class="sql-keyword">MONTH</span>, start, end_date)    <span class="sql-comment">-- Months between</span></code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">String Functions</h3>
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16</div>
+                    <pre><code><span class="sql-comment">-- Concatenation</span>
+<span class="sql-keyword">CONCAT</span>(first_name, <span style="color: #c2185b;">' '</span>, last_name)    <span class="sql-comment">-- NULL-safe concat</span>
+first_name + <span style="color: #c2185b;">' '</span> + last_name           <span class="sql-comment">-- Returns NULL if any part NULL</span>
+
+<span class="sql-comment">-- Case Conversion</span>
+<span class="sql-keyword">UPPER</span>(text), <span class="sql-keyword">LOWER</span>(text)              <span class="sql-comment">-- Change case</span>
+
+<span class="sql-comment">-- Trimming</span>
+<span class="sql-keyword">TRIM</span>(text)                           <span class="sql-comment">-- Remove leading/trailing spaces</span>
+<span class="sql-keyword">LTRIM</span>(text), <span class="sql-keyword">RTRIM</span>(text)             <span class="sql-comment">-- Left/Right trim</span>
+
+<span class="sql-comment">-- Substring & Search</span>
+<span class="sql-keyword">SUBSTRING</span>(text, start, length)       <span class="sql-comment">-- Extract portion</span>
+<span class="sql-keyword">LEFT</span>(text, n), <span class="sql-keyword">RIGHT</span>(text, n)        <span class="sql-comment">-- First/Last n chars</span>
+<span class="sql-keyword">CHARINDEX</span>(<span style="color: #c2185b;">'search'</span>, text)           <span class="sql-comment">-- Find position</span>
+<span class="sql-keyword">LEN</span>(text)                            <span class="sql-comment">-- String length</span>
+<span class="sql-keyword">REPLACE</span>(text, <span style="color: #c2185b;">'old'</span>, <span style="color: #c2185b;">'new'</span>)        <span class="sql-comment">-- Replace substring</span></code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">NULL Handling</h3>
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11</div>
+                    <pre><code><span class="sql-comment">-- Replace NULL with default value</span>
+<span class="sql-keyword">COALESCE</span>(value, 0)                   <span class="sql-comment">-- Return first non-NULL</span>
+<span class="sql-keyword">ISNULL</span>(value, <span style="color: #c2185b;">'N/A'</span>)                <span class="sql-comment">-- SQL Server specific</span>
+<span class="sql-keyword">IFNULL</span>(value, 0)                     <span class="sql-comment">-- MySQL specific</span>
+
+<span class="sql-comment">-- NULL checks</span>
+<span class="sql-keyword">WHERE</span> column <span class="sql-keyword">IS NULL</span>
+<span class="sql-keyword">WHERE</span> column <span class="sql-keyword">IS NOT NULL</span>
+
+<span class="sql-comment">-- NULL in expressions</span>
+<span class="sql-keyword">NULLIF</span>(expr1, expr2)                 <span class="sql-comment">-- Return NULL if equal</span>
+<span class="sql-keyword">COALESCE</span>(col1, col2, col3, 0)        <span class="sql-comment">-- First non-NULL from list</span></code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Data Type Conversion</h3>
+                </div>
+                <div class="code-container">
+                    <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12</div>
+                    <pre><code><span class="sql-comment">-- Explicit conversion</span>
+<span class="sql-keyword">CAST</span>(value <span class="sql-keyword">AS INT</span>)                  <span class="sql-comment">-- ANSI standard</span>
+<span class="sql-keyword">CAST</span>(value <span class="sql-keyword">AS FLOAT</span>)                <span class="sql-comment">-- For decimal division</span>
+<span class="sql-keyword">CAST</span>(value <span class="sql-keyword">AS VARCHAR</span>(50))          <span class="sql-comment">-- To string</span>
+<span class="sql-keyword">CONVERT</span>(<span class="sql-keyword">INT</span>, value)                 <span class="sql-comment">-- SQL Server specific</span>
+
+<span class="sql-comment">-- Safe conversion (returns NULL on error)</span>
+<span class="sql-keyword">TRY_CAST</span>(value <span class="sql-keyword">AS INT</span>)              <span class="sql-comment">-- SQL Server 2012+</span>
+<span class="sql-keyword">TRY_CONVERT</span>(<span class="sql-keyword">INT</span>, value)             <span class="sql-comment">-- SQL Server 2012+</span>
+
+<span class="sql-comment">-- Common pattern: Avoid integer division</span>
+<span class="sql-keyword">CAST</span>(numerator <span class="sql-keyword">AS FLOAT</span>) / denominator  <span class="sql-comment">-- Returns decimal</span></code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Query Execution Order</h3>
+                </div>
+                <div class="alert alert-info">
+                    <span class="alert-icon">ℹ</span>
+                    <div>
+                        <strong>Logical Order (How SQL Processes):</strong><br><br>
+                        1. <strong>FROM</strong> - Tables and JOINs<br>
+                        2. <strong>WHERE</strong> - Row filtering<br>
+                        3. <strong>GROUP BY</strong> - Grouping<br>
+                        4. <strong>HAVING</strong> - Group filtering<br>
+                        5. <strong>SELECT</strong> - Column selection<br>
+                        6. <strong>DISTINCT</strong> - Remove duplicates<br>
+                        7. <strong>ORDER BY</strong> - Sorting<br>
+                        8. <strong>LIMIT/TOP</strong> - Row limiting<br><br>
+
+                        <strong>Why this matters:</strong> You can't use column aliases from SELECT in WHERE clause, but
+                        you CAN use them in ORDER BY.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div style="text-align: center; width: 100%;">
+            <p><strong>© 2025 Skill AI Path. All Rights Reserved.</strong></p>
+            <p>Created by: Viresh Gendle | tech@skillaipath.com | skillaipath.com</p>
+            <p>Licensed for educational and internal business use. Attribution required when sharing. Commercial
+                redistribution prohibited.</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function () {
+                // Remove active class from all nav items and sections
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
+
+                // Add active class to clicked nav item
+                this.classList.add('active');
+
+                // Show corresponding section
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+
+                // Scroll to top of main content
+                document.querySelector('main').scrollTop = 0;
+            });
+        });
+    </script>
+</body>
+
+</html>

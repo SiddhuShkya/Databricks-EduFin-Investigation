@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Setup Guide — Databricks Free Edition + Backup Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #e3f2fd 0%, #f3e5f5 100%);
+            color: #37474f;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            border-right: 1px solid #b0bec5;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            background: linear-gradient(135deg, #90caf9 0%, #ce93d8 100%);
+            border-bottom: 1px solid #b0bec5;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: #1a237e;
+            font-weight: 600;
+        }
+
+        .sidebar-header p {
+            font-size: 0.85em;
+            color: #4a148c;
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 20px;
+        }
+
+        .nav-section-title {
+            padding: 8px 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #5e35b1;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #455a64;
+            font-size: 0.9em;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: #e1bee7;
+            border-left-color: #7b1fa2;
+            color: #4a148c;
+        }
+
+        .nav-item.active {
+            background-color: #f3e5f5;
+            border-left-color: #9c27b0;
+            color: #6a1b9a;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px 60px;
+            max-width: 1200px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #bbdefb 0%, #f8bbd0 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #b0bec5;
+        }
+
+        .header h1 {
+            color: #1565c0;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            color: #c2185b;
+            font-size: 1.4em;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .metadata {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .metadata-item {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            border: 1px solid #cfd8dc;
+        }
+
+        .metadata-item strong {
+            color: #5e35b1;
+            margin-right: 5px;
+        }
+
+        .section {
+            background: white;
+            padding: 35px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e0e0e0;
+        }
+
+        .section h2 {
+            color: #1565c0;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #90caf9;
+        }
+
+        .section h3 {
+            color: #6a1b9a;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section h4 {
+            color: #c2185b;
+            font-size: 1.1em;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        .section p {
+            margin-bottom: 12px;
+            color: #455a64;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .critical-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .note-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1565c0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        /* Step Cards */
+        .step-card {
+            background: linear-gradient(135deg, #e8eaf6 0%, #fce4ec 100%);
+            border-left: 5px solid #7b1fa2;
+            padding: 22px;
+            margin: 18px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+
+        .step-card h4 {
+            color: #4a148c;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .step-card p, .step-card li {
+            color: #37474f;
+            font-size: 0.95em;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        th {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            color: #1565c0;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #90caf9;
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eceff1;
+            color: #455a64;
+            font-size: 0.9em;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #1e2a3a;
+            color: #e2e8f0;
+            padding: 18px 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 14px 0;
+            overflow-x: auto;
+            white-space: pre;
+            border-left: 4px solid #5e35b1;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d32f2f;
+            font-size: 0.9em;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 10px 0;
+            color: #455a64;
+        }
+
+        strong {
+            color: #6a1b9a;
+        }
+
+        /* Rule labels */
+        .rule-label {
+            display: inline-block;
+            background: #7b1fa2;
+            color: white;
+            font-size: 0.75em;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-right: 8px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            padding: 30px;
+            margin-top: 50px;
+            border-top: 2px solid #b0bec5;
+            margin-left: 280px;
+        }
+
+        footer p {
+            margin: 8px 0;
+            color: #37474f;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        footer strong {
+            color: #1565c0;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 8em;
+            font-weight: 900;
+            color: rgba(156, 39, 176, 0.04);
+            pointer-events: none;
+            z-index: 1;
+            white-space: nowrap;
+            letter-spacing: 0.1em;
+            user-select: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            footer {
+                margin-left: 0;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="watermark">SkillAI Path</div>
+
+    <div class="container">
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Platform Setup</h1>
+                <p>Databricks Free Edition + Backup</p>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <div class="nav-item" onclick="scrollToSection('signup')">01. Databricks Sign Up</div>
+                    <div class="nav-item" onclick="scrollToSection('compute')">02. Understanding Compute</div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Data Setup</div>
+                    <div class="nav-item" onclick="scrollToSection('upload')">03. Uploading CSV Files</div>
+                    <div class="nav-item" onclick="scrollToSection('editor')">04. SQL Editor Workflow</div>
+                    <div class="nav-item" onclick="scrollToSection('scale')">05. Day 3 Scale Shift</div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Platform Rules</div>
+                    <div class="nav-item" onclick="scrollToSection('discipline')">06. Scale Discipline</div>
+                    <div class="nav-item" onclick="scrollToSection('backup')">07. Backup Platform</div>
+                    <div class="nav-item" onclick="scrollToSection('troubleshooting')">08. Troubleshooting</div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <div class="header">
+                <h1>Platform Setup Guide</h1>
+                <h2>Databricks Free Edition + Backup Platform</h2>
+                <div class="metadata">
+                    <div class="metadata-item"><strong>Course:</strong> Solve Like an Engineer</div>
+                    <div class="metadata-item"><strong>Platform:</strong> Databricks Free Edition</div>
+                    <div class="metadata-item"><strong>Backup:</strong> Google Colab + DuckDB</div>
+                    <div class="metadata-item"><strong>Provider:</strong> SkillAI Path</div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- SECTION 1: SIGN UP                                            -->
+            <!-- ============================================================ -->
+            <section class="section" id="signup">
+                <h2>01. Databricks Free Edition — Sign Up</h2>
+                <p>You will work on the same platform used by production data engineering teams. Not a simplified playground — the real thing.</p>
+                <p>No credit card required. No cloud provider account. No trial period that expires.</p>
+
+                <div class="step-card">
+                    <h4>Step 1 — Go to the Signup Page</h4>
+                    <p>Visit <strong>databricks.com/try-databricks</strong></p>
+                    <p>You will see two options: Free Trial and Free Edition.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 2 — Select Free Edition</h4>
+                    <p>Click <strong>"Get started with Free Edition"</strong></p>
+                    <p>Do not select the AWS, Azure, or GCP trial options. Those require cloud provider accounts and credit cards. Free Edition is the option on the right. It reads "For personal, non-commercial use."</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 3 — Create Your Account</h4>
+                    <p>Sign up with Google, Microsoft, or email OTP. No password is required if using Google or Microsoft. Fill in your name and details — Databricks will create your workspace automatically.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 4 — Bookmark Your Workspace</h4>
+                    <p>Once your workspace opens, <strong>bookmark the URL immediately.</strong></p>
+                    <p>It will resemble: <code>https://dbc-xxxxxxxx.cloud.databricks.com</code></p>
+                    <p>This is your workspace. You will return to it every day.</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>What is included with Free Edition:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>One workspace with serverless compute (auto-managed, no cluster setup)</li>
+                        <li>One SQL warehouse (2X-Small, starts automatically)</li>
+                        <li>Unity Catalog for data governance</li>
+                        <li>Delta Lake tables</li>
+                        <li>SQL Editor and Notebooks</li>
+                        <li>Up to 5 concurrent job tasks</li>
+                    </ul>
+                </div>
+
+                <div class="critical-box">
+                    <strong>Known Issue:</strong> Some accounts may show "Cannot Create Serverless Cluster" immediately after signup. If this occurs, wait 30 minutes. If the issue persists, create a new account using a different email address. This resolves the problem.
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- SECTION 2: COMPUTE                                            -->
+            <!-- ============================================================ -->
+            <section class="section" id="compute">
+                <h2>02. Understanding Compute — What Runs Your Queries</h2>
+                <p>When you write SQL and click Run, something must process that query. That "something" is compute. Databricks Free Edition provides two types.</p>
+
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>SQL Warehouse</th>
+                        <th>Serverless Notebook Compute</th>
+                    </tr>
+                    <tr>
+                        <td><strong>What it is</strong></td>
+                        <td>A dedicated SQL engine optimized for analytical queries</td>
+                        <td>General-purpose compute that runs Python, SQL, Scala, and R in notebooks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Where you use it</strong></td>
+                        <td>SQL Editor (sidebar icon)</td>
+                        <td>Notebooks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best for</strong></td>
+                        <td>Writing and running SQL queries during Days 1 through 5</td>
+                        <td>Running the data generator notebook on Day 3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Startup time</strong></td>
+                        <td>2–6 seconds (fast)</td>
+                        <td>10–30 seconds (cold start)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Free Edition limit</strong></td>
+                        <td>One warehouse, 2X-Small size</td>
+                        <td>Limited to small cluster sizes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Auto-starts</strong></td>
+                        <td>Yes, when you run a query in SQL Editor</td>
+                        <td>Yes, when you run a cell in a notebook</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Auto-stops</strong></td>
+                        <td>Yes, after idle timeout (conserves compute)</td>
+                        <td>Yes, after idle timeout</td>
+                    </tr>
+                </table>
+
+                <div class="note-box">
+                    <strong>Simple rule for the week:</strong><br><br>
+                    Days 1–2 and 4–5: Use the <strong>SQL Editor</strong> (runs on SQL Warehouse). Best for writing and executing SQL queries.<br><br>
+                    Day 3: Use a <strong>Notebook</strong> (runs on Serverless Compute). Required to run the Python generator that creates the 500,000-row dataset.
+                </div>
+
+                <div class="warning-box">
+                    <strong>The 8-Minute Budget:</strong> Free Edition provides limited compute per day. One well-planned query is worth more than ten trial-and-error attempts. Write your SQL in a workbook first. Verify your logic. Run only when you are confident.
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- SECTION 3: UPLOADING CSV FILES                                -->
+            <!-- ============================================================ -->
+            <section class="section" id="upload">
+                <h2>03. Uploading CSV Files (Days 1–2)</h2>
+                <p>You receive 5 CSV files from Graphy. Each becomes a table inside Databricks.</p>
+
+                <div class="step-card">
+                    <h4>Step 1 — Create the Schema</h4>
+                    <p>Open <strong>SQL Editor</strong> from the left sidebar (look for the SQL console icon). Run this command:</p>
+                    <div class="code-block">CREATE SCHEMA IF NOT EXISTS edufin_small;</div>
+                    <p>This creates a container for your 5 tables. Think of a schema as a folder for related tables.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 2 — Upload Each CSV</h4>
+                    <p>In the left sidebar, click <strong>+ New</strong> at the top, then click <strong>Data</strong>.</p>
+                    <p>Select <strong>"Create or modify table"</strong>. Drag and drop your first CSV file (for example, <code>loans.csv</code>) into the upload zone.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 3 — Configure the Table</h4>
+                    <p>Databricks will preview the data. Before clicking Create, confirm the following:</p>
+                    <ol>
+                        <li>Catalog: select <strong>workspace</strong> (or your default catalog)</li>
+                        <li>Schema: select <strong>edufin_small</strong></li>
+                        <li>Table name: match the file name exactly:
+                            <ul>
+                                <li><code>loans.csv</code> → table name: <strong>loans</strong></li>
+                                <li><code>customers.csv</code> → table name: <strong>customers</strong></li>
+                                <li><code>dim_city.csv</code> → table name: <strong>dim_city</strong></li>
+                                <li><code>dim_state.csv</code> → table name: <strong>dim_state</strong></li>
+                                <li><code>institutions.csv</code> → table name: <strong>institutions</strong></li>
+                            </ul>
+                        </li>
+                        <li>Confirm column types look correct (Databricks auto-detects these)</li>
+                        <li>Click <strong>Create</strong></li>
+                    </ol>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 4 — Repeat for All 5 Files</h4>
+                    <p>Upload each CSV file one at a time. All 5 must go into the <strong>edufin_small</strong> schema.</p>
+                    <table>
+                        <tr><th>CSV File</th><th>Table Name</th><th>Expected Rows</th></tr>
+                        <tr><td>dim_state.csv</td><td>dim_state</td><td>18</td></tr>
+                        <tr><td>dim_city.csv</td><td>dim_city</td><td>45</td></tr>
+                        <tr><td>institutions.csv</td><td>institutions</td><td>50</td></tr>
+                        <tr><td>customers.csv</td><td>customers</td><td>3,000</td></tr>
+                        <tr><td>loans.csv</td><td>loans</td><td>5,000</td></tr>
+                    </table>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 5 — Verify Your Upload</h4>
+                    <p>Open SQL Editor and run the following verification queries:</p>
+                    <div class="code-block">SELECT count(*) FROM edufin_small.loans;
+-- Expected: 5000
+
+SELECT count(*) FROM edufin_small.customers;
+-- Expected: 3000
+
+SELECT * FROM edufin_small.loans LIMIT 5;</div>
+                    <p>If you see data returned, you are ready for Day 1.</p>
+                </div>
+
+                <div class="critical-box">
+                    <strong>Common mistake:</strong> Forgetting the schema prefix. <code>SELECT * FROM loans</code> will fail. Always use <code>SELECT * FROM edufin_small.loans</code>. This is how production databases work. Tables live inside schemas. Develop this habit from the start.
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- SECTION 4: SQL EDITOR WORKFLOW                                -->
+            <!-- ============================================================ -->
+            <section class="section" id="editor">
+                <h2>04. SQL Editor — Your Daily Workspace</h2>
+                <p>The SQL Editor is where you will spend the majority of your time during this challenge.</p>
+
+                <div class="step-card">
+                    <h4>Opening SQL Editor</h4>
+                    <p>Left sidebar → Click the SQL console icon (resembles a terminal prompt). A SQL warehouse will start automatically when you run your first query. Allow 2–6 seconds for startup.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Organizing Your Work</h4>
+                    <p>Create one query tab per phase. Name them clearly:</p>
+                    <ul>
+                        <li>Phase 1 — Portfolio Health</li>
+                        <li>Phase 2 — Geographic Risk</li>
+                        <li>Phase 3 — Customer Risk</li>
+                        <li>Phase 4 — Institutional Risk</li>
+                        <li>Phase 5 — Timeline Analysis</li>
+                    </ul>
+                    <p>Queries auto-save. Save manually (Ctrl+S) after significant progress.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Understanding Your Schema</h4>
+                    <p>Before writing complex queries, confirm what you have available:</p>
+                    <div class="code-block">-- View all tables in your schema
+SHOW TABLES IN edufin_small;
+
+-- View columns and data types for any table
+DESCRIBE TABLE edufin_small.loans;
+DESCRIBE TABLE edufin_small.customers;
+DESCRIBE TABLE edufin_small.dim_city;</div>
+                </div>
+
+                <div class="step-card">
+                    <h4>How Tables Connect — JOIN Reference</h4>
+                    <p>You have 5 separate tables. They connect through foreign keys as follows:</p>
+                    <div class="code-block">loans.customer_id      →  customers.customer_id
+customers.city_id      →  dim_city.city_id
+dim_city.state_id      →  dim_state.state_id
+loans.institution_id   →  institutions.institution_id</div>
+                    <p>Most business questions will require joining two or more tables. Example:</p>
+                    <div class="code-block">-- Which cities have the most loans?
+SELECT dc.city_name, COUNT(*) as total_loans
+FROM edufin_small.loans l
+JOIN edufin_small.customers c ON l.customer_id = c.customer_id
+JOIN edufin_small.dim_city dc ON c.city_id = dc.city_id
+GROUP BY dc.city_name
+ORDER BY total_loans DESC
+LIMIT 10;</div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- SECTION 5: DAY 3 SCALE SHIFT                                  -->
+            <!-- ============================================================ -->
+            <section class="section" id="scale">
+                <h2>05. Day 3 — Scale Shift (Generator Notebook)</h2>
+                <p>On Day 3, you receive a Python notebook that generates 500,000 rows of data. This is where the challenge changes in character.</p>
+
+                <div class="step-card">
+                    <h4>Step 1 — Download the Generator Notebook</h4>
+                    <p>Download the <code>.ipynb</code> or <code>.dbc</code> file from Graphy.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 2 — Import into Databricks</h4>
+                    <p>In your workspace: Left sidebar → <strong>Workspace</strong> → Click your username folder → Right-click → <strong>Import</strong>. Select the downloaded file. It will appear as a notebook.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 3 — Run the Notebook</h4>
+                    <p>Open the notebook. It will auto-attach to serverless compute. Run all cells from top to bottom — either via Run All at the top, or cell by cell using Shift+Enter.</p>
+                    <p>This takes approximately 5–10 minutes. Progress messages will appear as data is generated. When complete, a new schema named <strong>edufin_national</strong> will be created with 5 tables at full scale.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 4 — Verify the Scale Shift</h4>
+                    <p>Return to SQL Editor and run the following verification:</p>
+                    <div class="code-block">SELECT count(*) FROM edufin_national.loans;
+-- Expected: 500,000
+
+SELECT count(*) FROM edufin_national.customers;
+-- Expected: 100,000</div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>From Day 3 onwards:</strong> Change all your queries from <code>edufin_small</code> to <code>edufin_national</code>. The table names, columns, and JOINs remain identical. The behaviour changes completely at 100x scale.
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- SECTION 6: SCALE DISCIPLINE                                   -->
+            <!-- ============================================================ -->
+            <section class="section" id="discipline">
+                <h2>06. Scale Discipline — Non-Negotiable</h2>
+                <p>In a serverless environment, planning is more valuable than typing. These five rules govern your entire week on the platform.</p>
+
+                <div class="step-card">
+                    <h4><span class="rule-label">Rule 01</span> The 8-Minute Budget</h4>
+                    <p>Free Edition provides limited serverless compute per day. One well-planned query is worth more than ten trial-and-error attempts. You have approximately 8 minutes of active compute available per day. Use it with intention.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4><span class="rule-label">Rule 02</span> Plan Before You Run</h4>
+                    <p>Write your SQL in the workbook first. Check your WHERE clauses and LIMITs. Paste and execute only once you are confident the query is correct. Engineers think first, then act.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4><span class="rule-label">Rule 03</span> Always Use LIMIT</h4>
+                    <p><code>SELECT *</code> without a LIMIT on 500,000 rows will crash your browser rendering and consume your daily budget. Every exploratory query must end with <code>LIMIT 100</code>.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4><span class="rule-label">Rule 04</span> Serverless Cold Starts</h4>
+                    <p>The 10–15 second delay on your first query is normal. The compute is initializing. Do not cancel and re-run. Doing so wastes multiple query starts. Wait for the result.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4><span class="rule-label">Rule 05</span> Schema Prefix Always</h4>
+                    <p>Always include the schema name. <code>SELECT * FROM loans</code> will fail. <code>SELECT * FROM edufin_small.loans</code> works. This is how production systems behave. Tables live in schemas — not in isolation.</p>
+                </div>
+
+                <div class="critical-box">
+                    <strong>Students who follow these 5 rules complete all phases comfortably within Free Edition limits.</strong><br>
+                    Students who disregard them run out of compute by Wednesday.
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- SECTION 7: BACKUP PLATFORM                                    -->
+            <!-- ============================================================ -->
+            <section class="section" id="backup">
+                <h2>07. Backup Platform — Google Colab + DuckDB</h2>
+                <p>If Databricks compute runs out or encounters issues on any given day, switch to this platform immediately. Do not spend time debugging platform failures. Continue solving.</p>
+
+                <div class="step-card">
+                    <h4>What is DuckDB?</h4>
+                    <p>DuckDB is a fast, in-memory analytical SQL engine. It runs inside Google Colab (free, browser-based) and reads CSV files directly with SQL. No server, no installation, no account is required beyond a Google login.</p>
+                    <p>It supports all the SQL constructs required for this challenge: JOINs, GROUP BY, CTEs, window functions (LAG, LEAD, ROW_NUMBER), subqueries, and HAVING.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 1 — Open Google Colab</h4>
+                    <p>Navigate to <strong>colab.research.google.com</strong></p>
+                    <p>Click <strong>+ New Notebook</strong></p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 2 — Install DuckDB</h4>
+                    <p>In the first cell, run:</p>
+                    <div class="code-block">!pip install duckdb</div>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 3 — Upload Your CSV Files</h4>
+                    <p>Click the folder icon in the left sidebar of Colab. Click the upload icon and upload all 5 CSV files. They will appear in the file browser as:</p>
+                    <p><code>loans.csv</code>, <code>customers.csv</code>, <code>dim_city.csv</code>, <code>dim_state.csv</code>, <code>institutions.csv</code></p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 4 — Start Querying</h4>
+                    <p>In a new cell, run the following to confirm DuckDB is working:</p>
+                    <div class="code-block">import duckdb
+
+# DuckDB reads CSV files directly — no table creation required.
+duckdb.sql("SELECT * FROM 'loans.csv' LIMIT 5")</div>
+                    <p>That is all. You are running SQL on your data.</p>
+                </div>
+
+                <div class="step-card">
+                    <h4>Step 5 — Run Full Queries</h4>
+                    <p>Every SQL concept works in DuckDB. Here is an example using JOINs:</p>
+                    <div class="code-block">import duckdb
+
+result = duckdb.sql("""
+    SELECT dc.city_name, COUNT(*) as total_loans,
+           SUM(CASE WHEN l.loan_status = 'Defaulted' THEN 1 ELSE 0 END) as defaults
+    FROM 'loans.csv' l
+    JOIN 'customers.csv' c ON l.customer_id = c.customer_id
+    JOIN 'dim_city.csv' dc ON c.city_id = dc.city_id
+    GROUP BY dc.city_name
+    ORDER BY defaults DESC
+    LIMIT 10
+""")
+
+print(result)</div>
+                </div>
+
+                <div class="note-box">
+                    <strong>Key difference from Databricks:</strong> In DuckDB, you query the CSV filename directly (<code>'loans.csv'</code>) instead of a schema-qualified table name (<code>edufin_small.loans</code>). The SQL logic itself is identical.
+                </div>
+
+                <div class="warning-box">
+                    <strong>When to switch to the backup platform:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>Databricks shows "No compute resources available"</li>
+                        <li>Queries hang for more than 2 minutes with no response</li>
+                        <li>Your account shows persistent errors after multiple retries</li>
+                    </ul>
+                    <br>
+                    Do not spend more than 10 minutes troubleshooting Databricks. Switch to DuckDB, continue solving, and return to Databricks the following day.
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- SECTION 8: TROUBLESHOOTING                                    -->
+            <!-- ============================================================ -->
+            <section class="section" id="troubleshooting">
+                <h2>08. Troubleshooting</h2>
+                <p>Reference this table when you encounter platform issues before escalating or seeking support.</p>
+
+                <table>
+                    <tr>
+                        <th>Symptom</th>
+                        <th>Likely Cause</th>
+                        <th>Resolution</th>
+                    </tr>
+                    <tr>
+                        <td>"Table not found"</td>
+                        <td>Missing schema prefix or incorrect table name</td>
+                        <td>Use <code>edufin_small.loans</code> not <code>loans</code>. Run <code>SHOW TABLES IN edufin_small;</code> to verify available tables.</td>
+                    </tr>
+                    <tr>
+                        <td>"Schema not found"</td>
+                        <td>Schema has not been created yet</td>
+                        <td>Run <code>CREATE SCHEMA IF NOT EXISTS edufin_small;</code></td>
+                    </tr>
+                    <tr>
+                        <td>Query hangs (60s+)</td>
+                        <td>Cold start or missing LIMIT clause</td>
+                        <td>Wait 15 seconds. If still unresponsive, add <code>LIMIT 100</code>. Do not cancel and re-run.</td>
+                    </tr>
+                    <tr>
+                        <td>"No compute resources"</td>
+                        <td>Daily compute budget exhausted</td>
+                        <td>Wait until tomorrow. Switch to DuckDB backup. Or create a new Databricks account.</td>
+                    </tr>
+                    <tr>
+                        <td>Results show 0 rows</td>
+                        <td>Incorrect filter value or column name typo</td>
+                        <td>Run <code>DESCRIBE TABLE edufin_small.loans;</code> to verify exact column names.</td>
+                    </tr>
+                    <tr>
+                        <td>Generator notebook fails</td>
+                        <td>Compute startup issue</td>
+                        <td>Wait 30 seconds and re-run the cells. If the issue persists, create a new Databricks workspace.</td>
+                    </tr>
+                    <tr>
+                        <td>CSV upload fails</td>
+                        <td>File format issue or no active compute</td>
+                        <td>Ensure files end in <code>.csv</code> and have headers. Wait for the warehouse to start. Try uploading one file at a time.</td>
+                    </tr>
+                    <tr>
+                        <td>"Cannot create serverless cluster"</td>
+                        <td>Known Free Edition provisioning bug</td>
+                        <td>Wait 30 minutes. If the issue persists, create a new workspace with a different email address.</td>
+                    </tr>
+                    <tr>
+                        <td>Cannot locate SQL Editor</td>
+                        <td>UI navigation</td>
+                        <td>Left sidebar → Look for the SQL console icon (terminal prompt icon). This is distinct from the notebook icon.</td>
+                    </tr>
+                </table>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>© 2025 Skill AI Path. All Rights Reserved.</strong></p>
+        <p>Created by: Viresh Gendle | skillaipath.com</p>
+        <p>Licensed for educational and internal business use. Attribution required when sharing. Commercial redistribution prohibited.</p>
+    </footer>
+
+    <script>
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
+        }
+
+        window.addEventListener('scroll', function () {
+            const sections = document.querySelectorAll('.section');
+            let current = '';
+            sections.forEach(section => {
+                if (window.pageYOffset >= section.offsetTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                const text = item.textContent.toLowerCase().replace(/[^a-z0-9]/g, '');
+                if (current && current.replace(/[^a-z0-9]/g, '').includes(text.substring(3, 8))) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

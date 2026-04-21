@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduFin Portfolio Risk Analysis - Business Requirements Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Navigation Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #e3f2fd 0%, #f3e5f5 100%);
+            color: #37474f;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            border-right: 1px solid #b0bec5;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            background: linear-gradient(135deg, #90caf9 0%, #ce93d8 100%);
+            border-bottom: 1px solid #b0bec5;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: #1a237e;
+            font-weight: 600;
+        }
+
+        .sidebar-header p {
+            font-size: 0.85em;
+            color: #4a148c;
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 20px;
+        }
+
+        .nav-section-title {
+            padding: 8px 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #5e35b1;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #455a64;
+            font-size: 0.9em;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: #e1bee7;
+            border-left-color: #7b1fa2;
+            color: #4a148c;
+        }
+
+        .nav-item.active {
+            background-color: #f3e5f5;
+            border-left-color: #9c27b0;
+            color: #6a1b9a;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px 60px;
+            max-width: 1200px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #bbdefb 0%, #f8bbd0 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #b0bec5;
+        }
+
+        .header h1 {
+            color: #1565c0;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            color: #c2185b;
+            font-size: 1.4em;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .metadata {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .metadata-item {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            border: 1px solid #cfd8dc;
+        }
+
+        .metadata-item strong {
+            color: #5e35b1;
+            margin-right: 5px;
+        }
+
+        .section {
+            background: white;
+            padding: 35px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e0e0e0;
+        }
+
+        .section h2 {
+            color: #1565c0;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #90caf9;
+        }
+
+        .section h3 {
+            color: #6a1b9a;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section h4 {
+            color: #c2185b;
+            font-size: 1.1em;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        .blockquote {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 4px;
+            color: #e65100;
+        }
+
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .critical-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        th {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            color: #1565c0;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #90caf9;
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eceff1;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 10px 0;
+            color: #455a64;
+        }
+
+        strong {
+            color: #6a1b9a;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d32f2f;
+            font-size: 0.9em;
+        }
+
+        .phase-card {
+            background: linear-gradient(135deg, #e8eaf6 0%, #fce4ec 100%);
+            border-left: 5px solid #7b1fa2;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .phase-card h3 {
+            color: #4a148c;
+            margin-top: 0;
+        }
+
+        .query-box {
+            background: #f1f8e9;
+            border: 1px solid #c5e1a5;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .query-box h4 {
+            color: #558b2f;
+            margin-top: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .badge-healthy {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .badge-moderate {
+            background: #ffe0b2;
+            color: #e65100;
+        }
+
+        .badge-high {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+
+        .badge-critical {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            padding: 30px;
+            margin-top: 50px;
+            border-top: 2px solid #b0bec5;
+            margin-left: 280px;
+        }
+
+        footer p {
+            margin: 8px 0;
+            color: #37474f;
+            font-size: 0.9em;
+        }
+
+        footer strong {
+            color: #1565c0;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            footer {
+                margin-left: 0;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 8em;
+            font-weight: 900;
+            color: rgba(156, 39, 176, 0.05);
+            pointer-events: none;
+            z-index: 1;
+            white-space: nowrap;
+            letter-spacing: 0.1em;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Watermark -->
+    <div class="watermark">SkillAI Path</div>
+
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>EduFin BRD</h1>
+                <p>Portfolio Risk Analysis</p>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Overview</div>
+                    <div class="nav-item" onclick="scrollToSection('business-context')">Business Context</div>
+                    <div class="nav-item" onclick="scrollToSection('dataset-standards')">Dataset & Standards</div>
+                    <div class="nav-item" onclick="scrollToSection('formatting')">Formatting Standards</div>
+                    <div class="nav-item" onclick="scrollToSection('classification')">Health Classification</div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Analysis Phases</div>
+                    <div class="nav-item" onclick="scrollToSection('phase1')">Phase 1: Portfolio Health</div>
+                    <div class="nav-item" onclick="scrollToSection('phase2')">Phase 2: Geographic Risk</div>
+                    <div class="nav-item" onclick="scrollToSection('phase3')">Phase 3: Customer Risk</div>
+                    <div class="nav-item" onclick="scrollToSection('phase4')">Phase 4: Institutional Risk</div>
+                    <div class="nav-item" onclick="scrollToSection('phase5')">Phase 5: Crisis Timeline</div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Additional Info</div>
+                    <div class="nav-item" onclick="scrollToSection('out-of-scope')">Out of Scope</div>
+                    <div class="nav-item" onclick="scrollToSection('difficulty')">Progressive Difficulty</div>
+                    <div class="nav-item" onclick="scrollToSection('learning')">Learning Approach</div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>EduFin Portfolio Risk Analysis</h1>
+                <h2>Business Requirements Document</h2>
+                <div class="metadata">
+                    <div class="metadata-item"><strong>Focus:</strong> Execution-based learning</div>
+                    <div class="metadata-item"><strong>Version:</strong> 1.0</div>
+                    <div class="metadata-item"><strong>Date:</strong> February 2026</div>
+                </div>
+            </div>
+
+            <!-- Business Context -->
+            <section class="section" id="business-context">
+                <h2>Business Context</h2>
+
+                <h3>The Situation</h3>
+                <p>EduFin has discovered a <strong>₹12 Crore discrepancy</strong> in loan disbursements affecting
+                    <strong>15,000+ student accounts</strong> over 6 months. A federal compliance audit is scheduled for
+                    next month, and the CEO needs concrete answers for an emergency board meeting within <strong>48
+                        hours</strong>.</p>
+
+                <h3>Your Role</h3>
+                <p>You are the Data Analyst assigned to this crisis. The CEO is depending on you to analyze the
+                    portfolio data and provide decision-ready insights.</p>
+
+                <h3>The Challenge</h3>
+                <p>You have access to EduFin's complete database. Your job is to answer specific business questions in
+                    <strong>5 sequential phases</strong>, each building on the previous analysis.</p>
+                <p><strong>Recent System Changes:</strong> EduFin migrated from legacy Oracle CRM to Salesforce in
+                January 2024. While the data migration was largely successful, the data engineering team has flagged potential timestamp inconsistencies that may require validation during your analysis.</p>
+            </section>
+
+            <!-- Dataset & Standards -->
+            <section class="section" id="dataset-standards">
+                <h2>Dataset & Standards</h2>
+
+                <h3>Dataset Structure Reference</h3>
+                <div class="info-box">
+                    <h4>Context:</h4>
+                    <ul>
+                        <li><strong>Scale:</strong> Multi-crore education loan portfolio spanning 4 years (2021-2025)
+                        </li>
+                        <li><strong>Crisis Indicator:</strong> Board has flagged rising default rates exceeding industry
+                            norms</li>
+                        <li><strong>Data Completeness:</strong> Full loan lifecycle data from application to current
+                            status</li>
+                        <li><strong>Analysis Objective:</strong> Quantify crisis severity and identify intervention
+                            points</li>
+                        <li><strong>Note:</strong> Exact portfolio size, default exposure, and financial impact are
+                            unknown - you must discover these through SQL analysis.</li>
+                    </ul>
+                </div>
+
+                <h3>Available Tables</h3>
+
+                <h4>1. loans.csv (Core Transactional Table)</h4>
+                <ul>
+                    <li><strong>Identifiers:</strong> <code>loan_id</code>, <code>customer_id</code>,
+                        <code>institution_id</code></li>
+                    <li><strong>Financial:</strong> <code>loan_amount</code>, <code>interest_rate</code>,
+                        <code>emi_amount</code></li>
+                    <li><strong>Status:</strong> <code>loan_status</code> (Active, Defaulted, Overdue, Closed)</li>
+                    <li><strong>Timeline:</strong> <code>application_date</code>, <code>disbursement_date</code>,
+                        <code>maturity_date</code></li>
+                    <li><strong>Details:</strong> <code>loan_tenure_months</code>, <code>purpose_of_loan</code></li>
+                </ul>
+
+                <h4>2. customers.csv (Demographics)</h4>
+                <ul>
+                    <li><strong>Demographics:</strong> <code>customer_id</code>, <code>full_name</code>,
+                        <code>date_of_birth</code>, <code>gender</code>, <code>education_level</code></li>
+                    <li><strong>Financial:</strong> <code>annual_income</code>, <code>cibil_score</code>,
+                        <code>employment_type</code>, <code>employer_name</code></li>
+                    <li><strong>Contact:</strong> <code>phone_number</code>, <code>email_address</code>,
+                        <code>current_address</code></li>
+                    <li><strong>Location:</strong> <code>city_id</code></li>
+                </ul>
+
+                <h4>3. institutions.csv (Partners)</h4>
+                <ul>
+                    <li><strong>Details:</strong> <code>institution_id</code>, <code>institution_name</code>,
+                        <code>institution_type</code>, <code>tier</code></li>
+                </ul>
+
+                <h4>4. geographic_demographics.csv & dim_city.csv (Location)</h4>
+                <ul>
+                    <li>City and state details for geographic analysis</li>
+                    <li><strong>fiscal_year_start:</strong> Company's fiscal year start date (2023-04-01 for FY 2023)</li>
+                </ul>
+
+                <h4>5. defaults_collections.csv & payments.csv (Recovery)</h4>
+                <ul>
+                    <li>Payment history and collection activity logs</li>
+                </ul>
+            </section>
+
+            <!-- Formatting Standards -->
+            <section class="section" id="formatting">
+                <h2>Formatting Standards</h2>
+
+                <h3>Currency Display (₹ INR)</h3>
+                <ul>
+                    <li><strong>Crores:</strong> Amounts ≥ ₹1,00,00,000 → Display as "₹X.XX Cr"
+                        <ul>
+                            <li>Example: ₹24,240,000 = ₹2.42 Cr (divide by 10,000,000, round to 2 decimals)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Lakhs:</strong> Amounts < ₹1 Crore → Display as "₹X.XX L" <ul>
+                    <li>Example: ₹441,000 = ₹4.41 L (divide by 100,000, round to 2 decimals)</li>
+                </ul>
+                </li>
+                <li>Use professional formatting with commas for readability in source data</li>
+                </ul>
+
+                <h3>Percentage Precision</h3>
+                <ul>
+                    <li>Default rates and major metrics: 2 decimal places (e.g., 11.00%)</li>
+                    <li>Portfolio distributions: 1 decimal place (e.g., 79.3%)</li>
+                    <li>Always use ROUND function for consistency</li>
+                </ul>
+
+                <h3>Visual Indicators</h3>
+                <ul>
+                    <li><strong>Revenue Generating:</strong> Active loans</li>
+                    <li><strong>Successfully Recovered:</strong> Closed loans</li>
+                    <li><strong>Revenue Loss:</strong> Defaulted loans</li>
+                    <li><strong>At Risk:</strong> Overdue loans</li>
+                </ul>
+
+                <h3>Column Naming</h3>
+                <ul>
+                    <li>Use business-friendly aliases (not database column names)</li>
+                    <li>Example: <code>loan_count</code> → "Loan Count", <code>default_rate</code> → "Default Rate %"
+                    </li>
+                    <li>Capitalize properly for executive readability</li>
+                </ul>
+            </section>
+
+            <!-- Portfolio Health Classification -->
+            <section class="section" id="classification">
+                <h2>Portfolio Health Classification System</h2>
+
+                <h3>Classification Thresholds</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Classification</th>
+                            <th>Default Rate Range</th>
+                            <th>Visual Indicator</th>
+                            <th>Required Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-healthy">HEALTHY</span></td>
+                            <td>≤ 5.00%</td>
+                            <td>Green</td>
+                            <td>Standard monitoring protocols</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-moderate">MODERATE RISK</span></td>
+                            <td>> 5.00% to ≤ 10.00%</td>
+                            <td>Orange</td>
+                            <td>Enhanced monitoring required</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-high">HIGH RISK</span></td>
+                            <td>> 10.00% to ≤ 15.00%</td>
+                            <td>Yellow</td>
+                            <td>Enhanced collection + review underwriting</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-critical">CRITICAL</span></td>
+                            <td>> 15.00%</td>
+                            <td>Red</td>
+                            <td>Crisis team + external recovery agencies</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Industry Benchmarks</h3>
+                <ul>
+                    <li><strong>Normal Range:</strong> 5-8% default rate for education loan portfolios</li>
+                    <li><strong>Warning Threshold:</strong> 10% (triggers enhanced intervention)</li>
+                    <li><strong>Crisis Threshold:</strong> 12% (requires crisis management team)</li>
+                    <li><strong>Calculation:</strong> (Number of Defaulted Loans ÷ Total Disbursed Loans) × 100</li>
+                </ul>
+            </section>
+
+            <!-- Phase 1 -->
+            <section class="section" id="phase1">
+                <h2>The 5-Phase Analysis</h2>
+
+                <div class="phase-card">
+                    <h3>PHASE 1 — Monday | Portfolio Health Check</h3>
+                    <div class="blockquote">
+                        <strong>Business Request from CEO:</strong><br>
+                        "I need to know the scale of our portfolio problem. How big is our loan book? How much have we
+                        lost to defaults? What's our overall default rate? Give me the numbers I need to explain to the
+                        board how serious this crisis is. Calculate default rate as: (Number of loans with status='Defaulted') / (Total loans disbursed)"
+                    </div>
+
+                    <h4>Analytical Approach:</h4>
+
+                    <div class="query-box">
+                        <h4>Query 1A: Portfolio Status Distribution</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Count and percentage of loans in each status category
+                                (Active, Defaulted, Overdue, Closed)</li>
+                            <li><strong>Business Purpose:</strong> Understand the composition of the loan book.</li>
+                            <li><strong>Key Requirement:</strong> Sort by largest category to show primary status
+                                immediately.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 1B: Basic Portfolio Scale Metrics</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Total unique customers, total loans, total portfolio value,
+                                and average loan size.</li>
+                            <li><strong>Business Purpose:</strong> Establish the scale of operations to justify resource
+                                allocation.</li>
+                            <li><strong>Formatting:</strong> Use INR formatting (Crores/Lakhs).</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 1C: Risk Category Breakdown</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Counts for each risk category using conditional aggregation.
+                            </li>
+                            <li><strong>Business Purpose:</strong> Quantify specific risk buckets (Defaulted, Overdue)
+                                vs. Healthy loans.</li>
+                            <li><strong>Key Metrics:</strong> Include Default Rate % and Portfolio At Risk % (Defaulted
+                                + Overdue).</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 1D: Financial Impact Assessment</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Total monetary value at risk for each status category.</li>
+                            <li><strong>Business Purpose:</strong> Translate loan counts into actual financial exposure.
+                            </li>
+                            <li><strong>Key Requirement:</strong> Show "Total At Risk Value" (Defaulted + Overdue
+                                amounts).</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 1E: Executive Dashboard with Health Classification</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> A single comprehensive view combining all above metrics.
+                            </li>
+                            <li><strong>Business Purpose:</strong> Board-ready summary with automated insights.</li>
+                            <li><strong>Required Columns:</strong>
+                                <ul>
+                                    <li>Status counts and percentages</li>
+                                    <li>Financial values in Crores</li>
+                                    <li>Automated Health Classification (based on thresholds)</li>
+                                    <li>Recommended Board Action</li>
+                                </ul>
+                            </li>
+                            <li><strong>REQUIRED Text Summary:</strong> Executive summary interpreting:
+                                <ul>
+                                    <li>Severity of default rate vs benchmarks</li>
+                                    <li>Financial implication of confirmed losses</li>
+                                    <li>Viability of the active portfolio</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 2 -->
+            <section class="section" id="phase2">
+                <div class="phase-card">
+                    <h3>PHASE 2 — Tuesday | Geographic Risk Analysis</h3>
+                    <div class="blockquote">
+                        <strong>Business Request from CEO:</strong><br>
+                        "Where are we bleeding money? Which cities have the worst default rates? I need to know which
+                        geographic markets are causing this crisis so we can adjust our regional strategies."
+                    </div>
+
+                    <h4>Analytical Approach:</h4>
+
+                    <div class="query-box">
+                        <h4>Query 2A: Geographic Borrower Distribution</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Number of customers and loans per city.</li>
+                            <li><strong>Business Purpose:</strong> Identify our largest markets by volume.</li>
+                            <li><strong>Filter:</strong> Focus on disbursed loans only.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 2B: City-Level Risk Metrics</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Default rate per city.</li>
+                            <li><strong>Business Purpose:</strong> Pinpoint which specific locations are
+                                underperforming.</li>
+                            <li><strong>Filter:</strong> Exclude cities with low volume (<100 loans) to avoid
+                                    statistical noise.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 2C: Financial Exposure by Knowledge Hub</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Total portfolio value and total defaulted value per city.
+                            </li>
+                            <li><strong>Business Purpose:</strong> Identify where the most capital is at risk.</li>
+                            <li><strong>Formatting:</strong> Convert huge sums to Crores/Lakhs.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 2D: Geographic Risk Classification</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Classify cities as 'Critical', 'High Risk', 'Monitor', or
+                                'Safe' based on default rates.</li>
+                            <li><strong>Business Purpose:</strong> Prioritize regional intervention teams.</li>
+                            <li><strong>Rules:</strong> defaults > 15% = Critical, > 10% = High Risk.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 2E: Regional Crisis Dashboard</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Comprehensive city-level dashboard combining volume, risk,
+                                and financial impact.</li>
+                            <li><strong>Business Purpose:</strong> Strategic decision support for regional shutdowns.
+                            </li>
+                            <li><strong>Sorting:</strong> Sort by "Total Losses" (Defaulted Value) to prioritize highest
+                                financial damage.</li>
+                            <li><strong>REQUIRED Text Summary:</strong> Recommend 3 cities to halt lending in
+                                immediately.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 3 -->
+            <section class="section" id="phase3">
+                <div class="phase-card">
+                    <h3>PHASE 3 — Wednesday | Customer Risk Segmentation</h3>
+                    <p><strong>Note:</strong> For our collection workflows, we follow RBI guidelines which define default as loans 90+ days past due, regardless of status field.</p>
+                    <div class="blockquote">
+                        <strong>Business Request from Collections Manager:</strong><br>
+                        "My collection team needs a prioritized target list. Who are our riskiest customers? I need to
+                        know who has multiple defaults, who owes us the most money, and what action we should take."
+                    </div>
+
+                    <h4>Analytical Approach:</h4>
+
+                    <div class="query-box">
+                        <h4>Query 3A: Customer Profile Basics</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> List customers with their basic loan counts and total
+                                disbursed amounts.</li>
+                            <li><strong>Business Purpose:</strong> Build complete borrower profiles.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 3B: Default Behavior Analysis</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Identify customers with at least one defaulted loan.</li>
+                            <li><strong>Business Purpose:</strong> Isolate the problem borrower segment.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 3C: High-Value Defaulter Identification</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Total defaulted amount per customer.</li>
+                            <li><strong>Business Purpose:</strong> Focus collections on high-value recovery targets.
+                            </li>
+                            <li><strong>Filter:</strong> Focus on customers with total default exposure > ₹5 Lakhs.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 3D: Demographic Risk Correlation</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Analyze if certain income brackets or employment types have
+                                higher default rates.</li>
+                            <li><strong>Business Purpose:</strong> Refine future underwriting criteria.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 3E: Prioritized Collections Target List</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Final ranked list of customers for immediate action.</li>
+                            <li><strong>Business Purpose:</strong> Daily call list for collections team.</li>
+                            <li><strong>Risk Calculation:</strong> Assign 'Priority Score' based on Default Amount +
+                                CIBIL Score.</li>
+                            <li><strong>REQUIRED Text Summary:</strong> Profile of the "Ideal High-Risk Borrower" to
+                                watch out for.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 4 -->
+            <section class="section" id="phase4">
+                <div class="phase-card">
+                    <h3>PHASE 4 — Thursday | Institutional Partnership Risk</h3>
+                    <p><strong>Compliance Update:</strong> For regulatory reporting, default is defined as loans 180+ days past due OR loans with write-off flag. This differs from operational definitions.</p>
+                    <div class="blockquote">
+                        <strong>Business Request from Partnership Director:</strong><br>
+                        "Some of our partner institutions are consistently sending us students who default. I need to
+                        know which universities and colleges have the worst track records."
+                    </div>
+
+                    <h4>Analytical Approach:</h4>
+
+                    <div class="query-box">
+                        <h4>Query 4A: Institutional Volume Analysis</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Loan volume and total funding per institution.</li>
+                            <li><strong>Business Purpose:</strong> Identify key partners by size.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 4B: Partner Performance Metrics</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Default rate per university/college.</li>
+                            <li><strong>Business Purpose:</strong> Measure quality of students from each partner.</li>
+                            <li><strong>Filter:</strong> Minimum 50 loans to ensure statistical significance.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 4C: Financial Loss Attribution</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Total value of defaulted loans attributed to each
+                                institution.</li>
+                            <li><strong>Business Purpose:</strong> Determine which partnerships are costing EduFin
+                                money.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 4D: Partnership Tier & Risk Classification</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Categorize partners (Preferred vs. Probation vs. Blacklist).
+                            </li>
+                            <li><strong>Business Purpose:</strong> Automated partnership review status.</li>
+                            <li><strong>Rules:</strong> Default rate > 15% = Blacklist Candidate.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 4E: Partnership Review Dashboard</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Comprehensive partner scorecard.</li>
+                            <li><strong>Business Purpose:</strong> Support contract renegotiation or termination.</li>
+                            <li><strong>Sorting:</strong> Highest Default Rate first.</li>
+                            <li><strong>REQUIRED Text Summary:</strong> List of top 5 institutions to blacklist
+                                immediately.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 5 -->
+            <section class="section" id="phase5">
+                <div class="phase-card">
+                    <h3>PHASE 5 — Friday | Crisis Timeline + Time Intelligence</h3>
+                    <div class="blockquote">
+                        <strong>Business Request from CEO:</strong><br>
+                        "When did this crisis start? Was it sudden or gradual? I need Q4 2023 default trends for the board meeting next week."
+                    </div>
+
+                    <h4>Analytical Approach:</h4>
+
+                    <div class="query-box">
+                        <h4>Query 5A: Monthly Disbursement Trends</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Total loans and amount disbursed per month (last 24 months).
+                            </li>
+                            <li><strong>Business Purpose:</strong> Visualize growth trajectory.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 5B: Tracking Defaults by Vintage</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> How many loans from each month's cohort eventually
+                                defaulted.</li>
+                            <li><strong>Business Purpose:</strong> Cohort analysis to pinpoint bad vintage months.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 5C: Monthly Default Rate Trends</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Default Rate % for each month.</li>
+                            <li><strong>Business Purpose:</strong> The core "Crisis Timeline" metric.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 5D: Cumulative Financial Impact</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Rolling total of losses over time.</li>
+                            <li><strong>Business Purpose:</strong> See how the financial hole grew.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box">
+                        <h4>Query 5E: Crisis Timeline Dashboard</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Month-by-month crisis heat map.</li>
+                            <li><strong>Business Purpose:</strong> Pinpoint the exact "Point of Failure" (month where
+                                defaults spiked).</li>
+                            <li><strong>Classifications:</strong> CRISIS MONTH (>15%), WARNING MONTH (10-15%).</li>
+                            <li><strong>REQUIRED Text Summary:</strong> Identify the exact month the crisis began and
+                                whether it is currently stabilizing or worsening.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box" style="border-left: 4px solid #27ae60;">
+                        <h4>🔧 Query 5F: Month-over-Month Default Velocity (Custom Column Required)</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> MOM change in default rate using LAG() window function.</li>
+                            <li><strong>Custom Column:</strong> <code>default_velocity</code> — label each month as
+                                Accelerating / Stable / Improving.</li>
+                            <li><strong>Trap:</strong> The first month has no prior period. Return 'Baseline' — not
+                                NULL.</li>
+                            <li><strong>Trap:</strong> The denominator changes each month as new loans are added.
+                                Document which denominator you used.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box" style="border-left: 4px solid #27ae60;">
+                        <h4>🔧 Query 5G: Cohort Performance Analysis (Custom Column Required)</h4>
+                        <ul>
+                            <li><strong>Calculate:</strong> Tag each loan by disbursement quarter (e.g. '2022-Q3').
+                                Calculate default rate per cohort.</li>
+                            <li><strong>Custom Column:</strong> <code>cohort_label</code> — identify the
+                                worst-performing cohort by name.</li>
+                            <li><strong>Business Purpose:</strong> Did EduFin's underwriting standards worsen in a
+                                specific period?</li>
+                            <li><strong>Trap:</strong> A cohort with fewer than 50 loans is statistically insufficient —
+                                flag it, don't rank it.</li>
+                        </ul>
+                    </div>
+
+                    <div class="query-box" style="border-left: 4px solid #8e44ad;">
+                        <h4> Query 5H: Crisis Synthesis (Friday Capstone — Phase 1 + Phase 5 Combined)</h4>
+                        <ul>
+                            <li><strong>Question:</strong> Using your Phase 1 financial totals and your Phase 5 crisis
+                                onset date — estimate: what would total defaulted exposure have been at the moment the
+                                portfolio first crossed 10%?</li>
+                            <li><strong>This cannot be answered by one query alone.</strong> It requires combining Phase
+                                1 and Phase 5 outputs with written reasoning.</li>
+                            <li><strong>REQUIRED:</strong> Show your working. State your assumptions explicitly.</li>
+                            <li><strong>AI cannot do this correctly</strong> without you providing the Phase 1 context.
+                                This is the Week 1 capstone question.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Out of Scope -->
+            <section class="section" id="out-of-scope">
+                <h2>Out of Scope</h2>
+                <p>This analysis does NOT require:</p>
+                <ul>
+                    <li>Dashboard creation (Tableau/PowerBI)</li>
+                    <li>Predictive modeling (Machine Learning)</li>
+                    <li>Customer communication templates</li>
+                    <li>Process redesign recommendations</li>
+                </ul>
+                <p><strong>Focus:</strong> Answer the specific business questions with SQL data.</p>
+            </section>
+
+            <!-- Progressive Difficulty -->
+            <section class="section" id="difficulty">
+                <h2>Progressive Difficulty — What Each Day Builds</h2>
+                <ul>
+                    <li><strong>Phase 1 (Mon):</strong> Portfolio-level aggregation + threshold classification + your
+                        first custom column judgment call</li>
+                    <li><strong>Phase 2 (Tue):</strong> Multi-table JOINs at city grain + rate × exposure combined
+                        ranking (the analyst vs. query-writer distinction)</li>
+                    <li><strong>Phase 3 (Wed):</strong> Customer-level segmentation using multiple signals +
+                        action-mapped output (collections strategy, not a list)</li>
+                    <li><strong>Phase 4 (Thu):</strong> Partner risk with statistical discipline + legal-grade
+                        justification writing</li>
+                    <li><strong>Phase 5 (Fri):</strong> Time intelligence (LAG, cohort analysis, MOM trend) +
+                        cross-phase synthesis question</li>
+                </ul>
+                <p><strong>Cumulative effect:</strong> By Friday, the output of every phase connects. Phase 1 context is
+                    needed for the Phase 5 synthesis. That is how real analysis works.</p>
+            </section>
+
+            <!-- Learning Approach -->
+            <section class="section" id="learning">
+                <h2>Submission Standard — What "Done" Looks Like</h2>
+                <div class="info-box">
+                    <p>A completed phase submission has <strong>three parts</strong>, not one:</p>
+                    <ul>
+                        <li><strong>1. Your SQL</strong> — The queries. Any tool (SQLite, Python, online SQL editor).
+                        </li>
+                        <li><strong>2. Your Custom Column</strong> — At least one column you built that the BRD did not
+                            ask for. Include the column name, CASE logic, and a one-sentence justification for your
+                            threshold choices.</li>
+                        <li><strong>3. Your Business Recommendation</strong> — 3 sentences max. Written to the
+                            stakeholder named in that phase's CEO brief. Not a query result — a decision statement with
+                            a specific action.</li>
+                    </ul>
+                    <p style="margin-top:16px;"><strong>Before submitting:</strong> Answer the three WHY questions at
+                        the end of each phase in the Logic Guide. If you cannot answer them — your analysis is not
+                        ready.</p>
+                    <p style="margin-top:8px; color:#c0392b;"><strong>AI note:</strong> AI tools can generate the SQL.
+                        They cannot justify your custom column thresholds, write your specific business recommendation,
+                        or answer why your denominator choice matters for this portfolio. Those are yours.</p>
+                </div>
+                <div class="critical-box" style="margin-top: 30px; text-align: center; font-size: 1.2em;">
+                    <strong>Ready? Classify the schema first. Then start Phase 1.</strong>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div style="text-align: center; width: 100%;">
+            <p><strong>© 2025 Skill AI Path. All Rights Reserved.</strong></p>
+            <p>Created by: Viresh Gendle | <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                    data-cfemail="2d59484e456d5e464441414c445d4c5945034e4240">[email&#160;protected]</a> |
+                skillaipath.com</p>
+            <p>Licensed for educational and internal business use. Attribution required when sharing. Commercial
+                redistribution prohibited.</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // Update active state
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
+        }
+
+        // Add active state on scroll
+        window.addEventListener('scroll', function () {
+            const sections = document.querySelectorAll('.section');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+    

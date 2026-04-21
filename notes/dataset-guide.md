@@ -680,8 +680,8 @@ Pure Dimensions     →     Periodic Snapshot     →     Event-Driven Facts
 
 ```text
 loans (EVENT FACT)
-  └─ customer_id ──→ customers (DIMENSION)
-                        └─ city_id ──→ dim_city ──→ state_id ──→ dim_state
+  └─ customer_id → customers (DIMENSION)
+                        └─ city_id → dim_city → state_id → dim_state
                                                                       ↑
                                                                       | state_id
                                                                       |

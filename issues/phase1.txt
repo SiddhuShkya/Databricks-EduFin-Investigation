@@ -1,0 +1,166 @@
+Query 1A titled Understand the Data Structure delivers proper exploratory checks but missing the BRD-required status distribution with percentages. Query 1B missing customer count and average loan size in Lakhs. Query 1C uses loss_rate instead of portfolio_at_risk_pct. Query 1D and WHY Gate Q1 both exclude Overdue from at-risk (critical BRD violation). WHY Gate Q3 misidentified board priority metric despite CEO's explicit statement.
+
+STRENGTHS
+
+✅ Query 1A: Methodical exploratory checks (row count, primary key validation, NULL detection) show proper data investigation approach
+
+✅ Query 1C: Correct default_rate calculation with proper decimal precision using 100.0 division
+
+✅ Query 1E: Complete executive dashboard with all 4 status counts, correct classification thresholds (5%, 10%, 15%), strong analytical commentary
+
+✅ Custom Column: Risk tier classification with combined Defaulted + Overdue logic shows advanced thinking about effective default rate
+
+✅ Comments: Inline verification comments (Total loans: 5000, Number of defaulted loans: 590) show calculation validation mindset
+
+ISSUES
+
+🔴 1. MISSING - Query 1A: No Status Distribution Query
+
+Your title: STEP 1A — Understand the Data Structure
+
+Your queries: SELECT COUNT() as total_loans, COUNT(DISTINCT loan_id) as unique_loan_ids, COUNT() - COUNT(loan_status) AS null_loan_status_count FROM loans
+
+BRD Query 1A asks for: Count and percentage of loans in each status category (Active, Defaulted, Overdue, Closed), sorted by largest category to show primary status immediately
+
+You delivered exploratory checks but completely missing the required query with GROUP BY loan_status showing count and percentage per status for all 4 statuses. Your Query 1E has the counts broken out individually, but not in the grouped format with percentages that Query 1A should establish.
+
+Either rename to Understand the Data Structure and add the status distribution as a follow-up query, OR deliver the BRD-required grouped output.
+
+🔴 2. MISSING METRICS - Query 1B: Customer Count and Average Loan Size
+
+You calculated: COUNT(*) as total_loans, ROUND(SUM(loan_amount) / 10000000.0, 2) AS total_disbursed, COUNT(CASE WHEN loan_status = 'Defaulted' THEN 1 END) AS total_deafulted
+
+BRD Query 1B asks for: Total unique customers, total loans, total portfolio value, and average loan size with INR formatting (Crores/Lakhs)
+
+Missing customer count with COUNT(DISTINCT customer_id) and average loan size in Lakhs: ROUND(AVG(loan_amount) / 100000.0, 2)
+
+Note: Typo in column alias — deafulted should be defaulted
+
+🔴 3. WRONG METRIC - Query 1C: Loss Rate Instead of Portfolio At Risk Percentage
+
+You calculated: default_rate (Defaulted / Total × 100) and loss_rate ((Defaulted Amount / Total Amount) × 100)
+
+BRD Query 1C asks for: Default Rate % AND Portfolio At Risk % calculated as COUNT(CASE WHEN loan_status IN ('Defaulted', 'Overdue') THEN 1 END) × 100.0 / COUNT(*)
+
+Portfolio At Risk % must be count-based (percentage of loans) and include BOTH Defaulted AND Overdue statuses. Your loss_rate is an amount-based metric using only Defaulted loans. These measure different things: loss rate shows capital gone, portfolio at risk shows loans needing immediate intervention.
+
+Replace loss_rate with portfolio_at_risk_pct using proper count-based calculation including Overdue.
+
+🔴 4. CRITICAL ERROR - Query 1D: At-Risk Amount Excludes Overdue Loans
+
+You calculated: ROUND(SUM(loan_amount) / 10000000.0, 2) AS defaulted_amount_crores FROM loans WHERE loan_status = 'Defaulted'
+
+BRD Query 1D explicitly defines: Total At Risk Value (Defaulted + Overdue amounts) — Show Total At Risk Value including both statuses
+
+Should be: WHERE loan_status IN ('Defaulted', 'Overdue') to include both statuses
+
+This significantly underestimates portfolio risk exposure by excluding all Overdue loans from at-risk calculation.
+
+🔴 5. INCOMPLETE - Query 1E: Missing Required Metrics from Prior Queries
+
+You delivered: total_loans, status counts (Active, Defaulted, Overdue, Closed), default_rate_pct, total_loss_cr, portfolio_health_status
+
+BRD Query 1E asks for: A single comprehensive view combining all above metrics from Queries 1A-1D
+
+Missing metrics:
+
+Total customers (COUNT DISTINCT customer_id from Query 1B)
+
+Total portfolio value in Crores (from Query 1B)
+
+Average loan size in Lakhs (from Query 1B)
+
+Portfolio at risk % count-based (from Query 1C)
+
+At-risk amount in Crores including BOTH Defaulted AND Overdue (from Query 1D)
+
+Recommended board action
+
+Text summary (you have strong text but not structured as part of the SELECT output)
+
+Your custom risk_tier classification shows strong analytical thinking but don't replace BRD requirements with custom insights — add them as enhancements.
+
+🔴 6. WRONG ANSWER - WHY Gate Q1: Misunderstood At-Risk Definition
+
+You answered: Only defaulted loans (₹24.24 Cr), NOT overdue loans because defaulted are REALIZED losses (money already gone), overdue are POTENTIAL losses (recovery possible)
+
+BRD Query 1D explicitly asks: Does your Financial Impact include only defaulted loans, or does it include Overdue as well? Why did you make that choice?
+
+Your answer justifies the exact error in your queries. The BRD explicitly requires including BOTH statuses in at-risk calculations because the CEO needs to see total exposure requiring immediate action — not just realized losses, but all loans in distress consuming collection resources.
+
+Correct answer: Must include BOTH Defaulted AND Overdue because BRD defines At Risk to include both statuses combined — board needs to know total capital under stress, not just what's already written off.
+
+🔴 7. WRONG METRIC - WHY Gate Q3: Board Priority Number
+
+You answered: ₹24.24 Crores because it's the ONLY number that matters to the board, actual capital lost
+
+BRD business context: CEO explicitly states Calculate default rate as: (Number of loans with status='Defaulted') / (Total loans disbursed) — this is the metric I need to explain to the board
+
+Correct answer: Default rate percentage (11.80%) is most important because CEO's direct quote shows this is the metric explicitly requested to explain crisis severity to the board. Loss amount doesn't tell the board if this is systemic or bad luck — default rate (over 1 in 10 loans fail) shows the portfolio is fundamentally broken.
+
+PRIORITY FIX ORDER
+
+Query 1A: Add GROUP BY loan_status query showing SELECT loan_status, COUNT() AS loan_count, ROUND(COUNT() × 100.0 / SUM(COUNT(*)) OVER(), 2) AS percentage FROM loans GROUP BY loan_status ORDER BY loan_count DESC
+
+Query 1B: Add COUNT(DISTINCT customer_id) as total_customers and ROUND(AVG(loan_amount) / 100000.0, 2) as avg_loan_size_lakhs
+
+Query 1C: Replace loss_rate with portfolio_at_risk_pct: ROUND(COUNT(CASE WHEN loan_status IN ('Defaulted', 'Overdue') THEN 1 END) × 100.0 / COUNT(*), 2)
+
+Query 1D: Fix WHERE clause to WHERE loan_status IN ('Defaulted', 'Overdue') to include both statuses
+
+Query 1E: Add all missing metrics from Queries 1A-1D (customer count, total portfolio, avg loan size, portfolio at risk %, at-risk amount with Overdue, recommended action)
+
+WHY Gate Q1: Rewrite to state that at-risk MUST include both Defaulted and Overdue per BRD explicit definition — board needs total exposure under stress
+
+WHY Gate Q3: Rewrite to state default rate percentage (11.80%) is most important because CEO's direct quote in BRD shows this is the metric requested for board explanation
+
+Gate Status: Phase 1 NOT COMPLETE ❌
+
+Both Query 1C and 1D exclude Overdue from at-risk calculations (critical BRD violation). Query 1A missing required output. Query 1B missing core metrics. Query 1E incomplete dashboard. WHY Gate misunderstood BRD requirements despite CEO's explicit statements.
+
+
+Query 4A has misleading title claiming Health Score but delivers volume metrics with missing customer count and HAVING filter. Query 4C excludes Overdue from at-risk calculation and missing total portfolio metric. Queries 4B, 4D, 4E are correct with proper 15% thresholds and >= 50 filters. WHY Gates show strong business reasoning with comprehensive suspension justification.
+
+STRENGTHS
+
+✅ Query 4B: Correct default rate calculation with HAVING COUNT loan_id >= 50 filter and proper 15% threshold application downstream
+
+✅ Query 4D: Correct classification logic (Blacklist Candidate >15%, Probation >5%, Preferred) with >= 50 loan minimum enforced
+
+✅ Query 4E: Comprehensive dashboard combining all metrics with HAVING >= 50 filter, correct thresholds, window function for contribution percentage
+
+✅ Custom Column: Advanced portfolio average comparison logic (Suspend/Review/Reward/Retain) plus data quality anomaly flag for CIBIL > 900 shows strong analytical thinking
+
+✅ WHY Gate 2: Comprehensive suspension justification with institution name, metrics, thresholds, recommended actions, and post-suspension monitoring plan
+
+ISSUES
+
+🔴 1. MISLEADING TITLE + MISSING METRICS - Query 4A: Claims Health Score but Delivers Volume Only
+
+Your title: STEP 4A — Open Metric Design: "Partner Health Score"
+
+Your query: SELECT institution_name, tier, COUNT loan_id AS total_loans, ROUND SUM loan_amount divided by 10000000.0 AS total_disbursed_amount_cr FROM loans JOIN institutions GROUP BY institution_name, tier ORDER BY total_disbursed_amount_cr DESC
+
+BRD Query 4A asks for: Basic volume metrics - COUNT DISTINCT customer_id, COUNT loan_id, total portfolio value in Crores, with institution_type column and HAVING COUNT loan_id >= 50 filter
+
+Missing COUNT DISTINCT customer_id showing unique customers per institution. Missing institution_type column. Missing HAVING COUNT loan_id >= 50 filter which is MANDATORY for Phase 4 institution analysis. Your title says Health Score but you're calculating volume metrics (which is actually what BRD wants), so either rename to Basic Volume Metrics OR clarify what health score means if you intended something different.
+
+🔴 2. MISSING METRICS - Query 4C: Incomplete Financial Attribution
+
+You calculated: total_loans, ROUND SUM loan_amount divided by 10000000.0 AS default_exposure_cr, contribution_to_total_default_percentage WHERE loan_status = 'Defaulted'
+
+BRD Query 4C asks for: Total portfolio value to institution (all loan statuses), at-risk amount (Defaulted + Overdue combined), defaulted amount, contribution percentage
+
+Missing total_portfolio_value_cr showing full disbursed amount to institution regardless of loan status (should be calculated without WHERE filter to show total exposure). Your WHERE loan_status = 'Defaulted' shows only defaulted amount, but BRD requires at-risk amount including BOTH Defaulted AND Overdue loans combined to show total capital requiring intervention.
+
+PRIORITY FIX ORDER
+
+Query 4A: Add COUNT DISTINCT customer_id as total_customers, add institution_type to SELECT and GROUP BY, add HAVING COUNT loan_id >= 50 filter
+
+Query 4C: Add total_portfolio_value_cr calculated from all loans (remove WHERE filter for this metric), change default_exposure_cr to at_risk_amount_cr using WHERE loan_status IN ('Defaulted', 'Overdue'), keep separate defaulted_amount_cr for confirmed losses
+
+Query 4A: Either rename to Basic Volume Metrics (matches what you actually calculate) OR add health score formula if Partner Health Score was intentional
+
+Gate Status: Phase 4 COMPLETE with corrections needed ✅
+
+Queries 4B-4E are correct with proper thresholds and filters. Query 4A and 4C need metric additions to match BRD requirements. WHY Gates show strong business reasoning and comprehensive suspension justification with specific metrics and action plans. Custom column demonstrates advanced analytical thinking with portfolio-relative classifications.

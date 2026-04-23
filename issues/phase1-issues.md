@@ -160,3 +160,83 @@ ROUND(
 | **Phase 4** | ✅ MOSTLY CORRECT | 2 issues in queries 4A & 4C; 4B-4E solid |
 
 **Next Step:** Fix all Phase 1 issues first. Phase 4 is close but needs metric additions.
+
+**Fix:**
+Show four separate lines displaying Active Loan Value, Closed Loan Value, Defaulted Loan Value, and Overdue Loan Value (all in Crores). This allows the board to see where capital is positioned across each status category, not just the aggregate at-risk number.
+
+---
+
+### Issue 2: Query 1E — Missing Executive Text Summary
+
+**What You Showed:**
+SQL output with comprehensive metrics and risk classifications
+
+**What BRD Asks For:**
+REQUIRED Text Summary interpreting the numbers in plain business language. BRD explicitly asks for interpretation of:
+- Severity of 11.8% default rate
+- Financial implications of ₹24.24 Crore losses
+- Viability of the active portfolio
+
+**Expected Format:**
+```markdown
+## Executive Summary
+
+The 11.80% default rate is X times worse than industry benchmark of 2-5%. 
+
+Financial impact of ₹24.24 Crores represents Y% of deployed capital and proves Z.
+
+The active portfolio's viability is threatened because [specific reason from data].
+
+Recommended actions:
+1. [Action 1]
+2. [Action 2]
+```
+
+**Fix:**
+Add 3-4 sentences below your Query 1E output explaining what these numbers mean for the Board in plain business language. Do not just present numbers—interpret them for decision-making.
+
+---
+
+## Reasoning Issues 🟡
+
+### Issue 3: WHY Gate Q1 — Wrong Reasoning
+
+**Your Answer:**
+"My Financial Impact includes defaulted AND overdue because BRD instructs to include capital under stress so I added Overdue."
+
+**Problem:**
+This conflates two different purposes:
+- Query 1C defines PAR as Defaulted + Overdue combined (✅ correct for that query)
+- Query 1D asks for each status category value separately, not combined PAR (❌ you misunderstood the requirement)
+
+**Reality:**
+Query 1D's purpose is to show financial exposure broken down BY status category, which requires keeping them separate. Query 1C's purpose is to show portfolio-level risk, which requires combining them. The questions have different aggregation requirements.
+
+**Fix:**
+Change your WHY Gate Q1 answer to acknowledge that Query 1D needs status breakdown (separate rows for each status), while Query 1C correctly combines them for portfolio at-risk percentage. Explain that the distinction between analytical granularity and decision-making aggregation is intentional.
+
+---
+
+## Fix Priority
+
+1. **First (Critical):** Add status breakdown to Query 1D showing Active, Closed, Defaulted, Overdue values separately
+2. **Second (Critical):** Add executive text summary after Query 1E output with business interpretation
+3. **Third (Important):** Revise WHY Gate Q1 answer to distinguish between status breakdown and combined metrics
+
+---
+
+## Submission Checklist
+
+- [ ] Query 1D shows four separate status categories with values
+- [ ] Query 1E includes 3-4 sentence executive summary below the output
+- [ ] WHY Gate Q1 answer explains status breakdown vs. combined metrics
+- [ ] All queries execute without errors
+- [ ] All financial values are in correct units (Crores/Lakhs)
+- [ ] All percentages include % symbol
+- [ ] Sorting is by impact (not rate alone)
+
+---
+
+## Notes
+
+These are not conceptual misunderstandings—your analytical thinking is strong. These are specification mismatches. You have the right data and the right metrics; you just need to present them in the exact format BRD requires. Pay attention to whether each query asks for breakdown (separate lines) or aggregation (combined number). Each serves a different purpose.

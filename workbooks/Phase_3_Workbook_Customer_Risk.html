@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Phase 3 Workbook — Wednesday | Customer Risk Segmentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f6f8;
+            padding-bottom: 120px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6c3483 0%, #e74c3c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .header h2 {
+            margin: 10px 0 0 0;
+            font-weight: normal;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .header .day-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        .mindset-box {
+            background: #1a252f;
+            color: #ecf0f1;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .mindset-box h3 {
+            margin: 0 0 8px 0;
+            color: #e74c3c;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .mindset-box p {
+            margin: 0;
+            font-size: 1.05em;
+            line-height: 1.7;
+        }
+
+        .context-box {
+            background: #ffffff;
+            border-left: 5px solid #8e44ad;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            background: #f5eef8;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #d2b4de;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid #e1e8ed;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .section h3 {
+            color: #6c3483;
+            border-bottom: 2px solid #8e44ad;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .section .why-context {
+            font-size: 0.92em;
+            color: #555;
+            background: #f8f9fa;
+            border-left: 3px solid #95a5a6;
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .section .analyst-trap {
+            font-size: 0.92em;
+            color: #7d3c98;
+            background: #f5eef8;
+            border-left: 3px solid #7d3c98;
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .ai-assistant {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .ai-assistant h3 {
+            color: #1976d2;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .ai-assistant h3::before {
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #2196f3;
+            margin-right: 12px;
+            border-radius: 50%;
+        }
+
+        .ai-assistant .strategy-prompt {
+            font-size: 0.95em;
+            color: #1565c0;
+            font-style: italic;
+            border-left: 3px solid #64b5f6;
+            padding-left: 12px;
+            margin-top: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .sql-input {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            border: 2px solid #dcdde1;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            resize: vertical;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .sql-input:focus {
+            border-color: #8e44ad;
+            outline: none;
+            background-color: #fff;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 13px;
+            border: 2px solid #dcdde1;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        .text-input:focus {
+            border-color: #8e44ad;
+            outline: none;
+            background-color: #fff;
+        }
+
+        .file-input {
+            padding: 10px 0;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .learning-tip {
+            background: #fffbe6;
+            padding: 12px 14px;
+            border-radius: 5px;
+            border: 1px solid #ffe58f;
+            margin-top: 12px;
+            font-size: 0.88em;
+            color: #7d6608;
+        }
+
+        .custom-col-section {
+            background: #f0faf4;
+            border: 2px solid #27ae60;
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .custom-col-section h3 {
+            color: #1e8449;
+            margin-top: 0;
+        }
+
+        .why-gate-section {
+            background: #fff5f5;
+            border: 2px solid #c0392b;
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .why-gate-section h3 {
+            color: #c0392b;
+            margin-top: 0;
+        }
+
+        .why-question {
+            font-weight: 600;
+            color: #922b21;
+            margin-bottom: 6px;
+            font-size: 0.95em;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-download {
+            background-color: #8e44ad;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4);
+            transition: all 0.3s;
+        }
+
+        .btn-download:hover {
+            background-color: #7d3c98;
+            transform: scale(1.05);
+        }
+
+        .btn-reset {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 10em;
+            color: rgba(0, 0, 0, 0.04);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+            font-weight: 800;
+        }
+
+        .page-footer {
+            margin-top: 100px;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        /* ENGINEER'S LENS MODES */
+        .engineers-lens-container { background: #f8fafc; border: 1px solid #e2e8f0; padding: 30px; border-radius: 12px; }
+        body.dark-mode .engineers-lens-container { background: #1a202c !important; border-color: #2d3748 !important; }
+        
+        .engineers-lens-container h3 { color: #1a202c; }
+        body.dark-mode .engineers-lens-container h3 { color: #f7fafc !important; }
+        
+        .lens-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .lens-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #edf2f7; }
+        body.dark-mode .lens-item { background: #2d3748 !important; border-color: #4a5568 !important; color: #e2e8f0 !important; }
+        
+        .lens-item label { display: block; font-weight: 800; font-size: 11px; color: #718096; text-transform: uppercase; margin-bottom: 8px; }
+        body.dark-mode .lens-item label { color: #a0aec0 !important; }
+        
+        .lens-item p { margin: 0; font-size: 14px; line-height: 1.6; }
+    </style>
+
+    <!-- ===== EDUFIN ENHANCEMENTS v2 ===== -->
+    <style>
+        body.dark-mode {
+            background-color: #1a1a2e !important;
+            color: #e0e0e0 !important;
+        }
+
+        body.dark-mode .section {
+            background: #16213e !important;
+            border-color: #2a3a5e !important;
+            color: #e0e0e0 !important;
+        }
+
+        body.dark-mode .section h3 {
+            color: #63b3ed !important;
+            border-bottom-color: #63b3ed !important;
+        }
+
+        body.dark-mode .context-box {
+            background: #1e1e3a !important;
+            color: #e0e0e0 !important;
+        }
+
+        body.dark-mode .mindset-box {
+            background: #0f1923 !important;
+        }
+
+        body.dark-mode .student-info {
+            background: #16213e !important;
+            border-color: #2a3a5e !important;
+        }
+
+        body.dark-mode .form-control,
+        body.dark-mode .sql-input,
+        body.dark-mode .text-input {
+            background-color: #0f3460 !important;
+            color: #e0e0e0 !important;
+            border-color: #2a3a5e !important;
+        }
+
+        body.dark-mode .sql-input:focus,
+        body.dark-mode .text-input:focus {
+            background-color: #16213e !important;
+        }
+
+        body.dark-mode .custom-col-section {
+            background: #0a2e1a !important;
+            border-color: #1e8449 !important;
+        }
+
+        body.dark-mode .why-gate-section {
+            background: #2e0a0a !important;
+            border-color: #922b21 !important;
+        }
+
+        body.dark-mode .why-context {
+            background: #0f1923 !important;
+            color: #b0b0b0 !important;
+        }
+
+        body.dark-mode .analyst-trap {
+            background: #1a0f23 !important;
+        }
+
+        body.dark-mode .learning-tip {
+            background: #2e2a0a !important;
+            color: #c0a820 !important;
+        }
+
+        body.dark-mode .page-footer {
+            border-top-color: #2a3a5e !important;
+            color: #6c757d !important;
+        }
+
+        body.dark-mode .watermark {
+            color: rgba(255, 255, 255, 0.03) !important;
+        }
+
+        body.dark-mode .why-question {
+            color: #e07070 !important;
+        }
+
+        .day-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: linear-gradient(135deg, #1a1a2e, #2c3e50);
+            color: #ecf0f1;
+            padding: 10px 20px;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.95em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .day-banner .day-label {
+            font-weight: 700;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+        }
+
+        .day-banner .day-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .day-banner .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .day-banner .dot.done {
+            background: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .day-banner .dot.current {
+            background: #f39c12;
+            border-color: #f39c12;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(243, 156, 18, 0);
+            }
+        }
+
+        body {
+            padding-top: 48px !important;
+        }
+
+        .progress-container {
+            background: #ffffff;
+            border: 1px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .progress-container {
+            background: #16213e !important;
+            border-color: #2a3a5e !important;
+        }
+
+        .progress-bar-track {
+            background: #ecf0f1;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        body.dark-mode .progress-bar-track {
+            background: #0f3460 !important;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #7f8c8d;
+        }
+
+        .btn-darkmode {
+            background-color: #34495e;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(52, 73, 94, 0.4);
+            transition: all 0.3s;
+        }
+
+        .btn-darkmode:hover {
+            background-color: #2c3e50;
+            transform: scale(1.05);
+        }
+
+        .autosave-indicator {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: #27ae60;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .autosave-indicator.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='watermark'>SkillAI Path</div>
+
+    <div class='header'>
+        <h1>EduFin SQL Business Challenge</h1>
+        <h2>Phase 3 &mdash; Customer Risk Segmentation: Who Do We Call First?</h2>
+        <div class='day-badge'>WEDNESDAY</div>
+    </div>
+
+    <div class='student-info'>
+        <div class='form-group'><label>Your Name</label><input type='text' id='studentName' class='form-control'
+                placeholder='Enter your full name'></div>
+        <div class='form-group'><label>Your Email</label><input type='email' id='studentEmail' class='form-control'
+                placeholder='Enter your email address'></div>
+    </div>
+
+    <div class='mindset-box'>
+        <h3>Wednesday Mindset Unlock</h3>
+        <p>A sorted list is not a strategy. Today you stop thinking like a developer producing ranked rows and start
+            thinking like a collections manager who needs to tell their team of 20 people: <strong>call these 50
+                customers, in this order, using this specific approach for each segment.</strong> The output isn't a
+            table — it's an operational tool. The difference is your custom columns.</p>
+    </div>
+
+    <div class='context-box' style='border-left-color: #e67e22; background: #fffaf0;'>
+        <h3 style="color: #d35400;">STRATEGIC ALERT &mdash; The National Verification Mandate</h3>
+        <p>The "National Portfolio" dataset (500k records) is now live in Databricks. (See the <a href="../02_Docs_and_Guides/Databricks_Setup_Guide.html" style="color:#d35400; font-weight:bold;">Setup Guide</a> if you haven't yet). Preliminary checks suggest our
+            regional samples (5k) may have been misleading.
+            <br><br>
+            <strong>Your Mandate Today:</strong>
+            1. **Re-Verify Day 1 & 2**: Run your "Top 3 High Risk Cities" query on the 500k dataset. Does the risk
+            epicentre stay the same?
+            2. **Solve the Divergence**: One city that looked "Safe" in Day 2 now looks "Critical". Identify it and
+            explain why the volume change revealed this.
+            3. **Design, Don't Just Query**: The CEO wants a new **"Risk Efficiency"** metric. You must define the
+            logic, not just the code.
+        </p>
+    </div>
+
+    <div class='ai-assistant' style='margin-bottom: 30px;'>
+        <h3>AI Thinking Assistant — Multi-Tool Suite</h3>
+        <p>Use this multi-tool approach to solve the divergence:</p>
+        <div class='strategy-prompt'>
+            <strong>Antigravity (Strategy):</strong> "The CEO wants a 'Risk Efficiency' metric. How can I combine
+            Default Rate with Total Financial Exposure to find the 'Most Expensive' cities, not just the 'Most
+            Defaulters'?"
+            <br><br>
+            <strong>Notebook LM:</strong> Upload Day 1-3 Memos. Ask: "What are the conflicting signals between regional
+            and national reports?"
+            <br><br>
+            <strong>Databricks AI:</strong> "Optimize this JOIN between 500k loans and 50k customers for partition
+            performance."
+        </div>
+    </div>
+
+    <form id='assessmentForm'>
+        <div class='section'>
+            <h3>STEP 3A &mdash; The Scale Shift (Comparison Analysis)</h3>
+            <div class='why-context'><strong>What you're doing:</strong> Re-run your Day 2 "Default Rate by City" query
+                on the new 500k dataset. Compare the results. This is the ultimate test of an analyst: recognizing when
+                a sample size was too small to be trusted.</div>
+            <div class='input-group'><label>Your Divergence Discovery:</label><textarea id='input_3A_divergence'
+                    class='text-input'
+                    placeholder='Which city risk profile changed most? What was the % default rate on Day 2 vs Day 3?'></textarea>
+            </div>
+            <div class='input-group'><label>SQL Proof (500k aggregate):</label><textarea id='input_3A_sql'
+                    class='sql-input'
+                    placeholder='SELECT city, COUNT(*) as volume, AVG(CASE WHEN status="Defaulted" THEN 1 ELSE 0 END) as rate... GROUP BY 1 ORDER BY 3 DESC'></textarea>
+            </div>
+        </div>
+        <div class='section'>
+            <h3>STEP 3B — CIBIL Score Distribution Among Defaulters</h3>
+            <div class='why-context'><strong>What you're doing:</strong> Look at CIBIL score ranges for customers who
+                have defaulted. Do most defaulters have low CIBIL scores — or are there high-CIBIL defaulters too? This
+                distinction changes the collection approach entirely.</div>
+            <div class='input-group'><label>Your SQL Query:</label><textarea id='input_3B' class='sql-input'
+                    placeholder='Filter to defaulted customers. Show CIBIL score brackets. COUNT customers per bracket. What % are high-CIBIL vs low-CIBIL?'></textarea>
+            </div>
+            <div class='input-group'><label>Upload Result Screenshot:</label><input type='file' id='img_3B'
+                    accept='image/*' class='file-input' onchange='previewImage(this, "preview_3B")'>
+                <div id='preview_3B' class='image-preview'></div>
+            </div>
+            <div class='learning-tip'>Define your CIBIL brackets now. You'll need them for Step 3E. Common brackets:
+                300–550 (Poor), 551–700 (Fair), 701–750 (Good), 751+ (Excellent).</div>
+        </div>
+        <div class='section'>
+            <h3>STEP 3C — Open Metric Design: "Risk Efficiency"</h3>
+            <div class='why-context'><strong>What you're doing:</strong> The CEO doesn't want another "Top 10" list.
+                They want a metric that reveals which segments are "burning cash" the fastest. You must define the
+                components of this metric.</div>
+            <div class='input-group'><label>Define your 'Risk Efficiency' Metric logic:</label><textarea
+                    id='input_3C_logic' class='text-input'
+                    placeholder='Formula: (Defaulted_Amount / Total_Portfolio_Value) * log(Total_Borrowers). Explain why this is better than raw %.'></textarea>
+            </div>
+            <div class='input-group'><label>Your SQL Implementation:</label><textarea id='input_3C_sql'
+                    class='sql-input'
+                    placeholder='Implement your formula using SQL math functions. Use WITH clause for readability.'></textarea>
+            </div>
+        </div>
+        <div class='section'>
+            <h3>STEP 3D — Income and Employment Risk Profile</h3>
+            <div class='why-context'><strong>What you're doing:</strong> Cross-reference default behaviour with annual
+                income and employment type. Does self-employed vs. salaried status correlate with default rate? Does
+                income bracket matter? This determines whether EduFin's underwriting criteria need adjustment.</div>
+            <div class='input-group'><label>Your SQL Query:</label><textarea id='input_3D' class='sql-input'
+                    placeholder='GROUP BY employment_type. Show: total borrowers, total defaults, default_rate per employment type. Do the same for income brackets (LOW < 3L, MID 3-8L, HIGH > 8L).'></textarea>
+            </div>
+            <div class='input-group'><label>Upload Result Screenshot:</label><input type='file' id='img_3D'
+                    accept='image/*' class='file-input' onchange='previewImage(this, "preview_3D")'>
+                <div id='preview_3D' class='image-preview'></div>
+            </div>
+            <div class='learning-tip'>Which employment type has the highest default rate? Is that the same type that has
+                the highest total defaulted amount? If not, why does that difference matter?</div>
+        </div>
+        <div class='section'>
+            <h3>STEP 3E — Prioritized Collections Target List (Final Output)</h3>
+            <div class='why-context'><strong>What you're doing:</strong> Produce the final top-50 collections list.
+                Filter to defaulted customers. Rank by a Priority Score that you design — combining CIBIL score, total
+                defaulted amount, and default count. The output must be operationally usable: include segment label and
+                recommended action per customer.</div>
+            <div class='input-group'><label>Your SQL Query:</label><textarea id='input_3E' class='sql-input'
+                    placeholder='Full collections list: customer_name, total_defaulted_cr, default_count, cibil_score, city, borrower_segment, collection_approach, priority_score. ORDER BY priority_score DESC. LIMIT 50.'></textarea>
+            </div>
+            <div class='input-group'><label>Upload Result Screenshot:</label><input type='file' id='img_3E'
+                    accept='image/*' class='file-input' onchange='previewImage(this, "preview_3E")'>
+                <div id='preview_3E' class='image-preview'></div>
+            </div>
+        </div>
+    </form>
+
+    <div class='custom-col-section'>
+        <h3>BUILD YOUR CUSTOM COLUMNS &mdash; Required for Wednesday Submission</h3>
+        <p
+            style="background:#f3e8fd;padding:10px 14px;border-radius:6px;border-left:4px solid #8e44ad;margin-bottom:14px;font-size:0.9em;">
+            <strong>NEW TECHNIQUE &mdash; CTEs and Subqueries:</strong> Phase 1 = CASE. Phase 2 = Window Functions.
+            Today you unlock <code>WITH ... AS</code> (Common Table Expressions) &mdash; SQL's pipeline builder.
+            A CTE lets you name an intermediate result and reference it later. This is how production analysts write
+            multi-step logic in cloud environments like Databricks.
+        </p>
+        <p><strong>Column 1 &mdash; <code>borrower_segment</code>:</strong> Build a <strong>CTE pipeline</strong> that
+            first computes a <code>risk_score</code> per customer (weighted formula combining default_count, CIBIL,
+            income),
+            then segments based on the computed score. You must use at least one <code>WITH ... AS</code> block.</p>
+        <p><strong>Column 2 &mdash; <code>collection_approach</code>:</strong> Write a second CTE or subquery that
+            compares each customer's risk_score against the portfolio-wide average. Tag as "Above Average Risk" or
+            "Below Average Risk". Then map segment + relative risk to an action.</p>
+        <div class='input-group'>
+            <label>Your CTE pipeline (WITH risk_scored AS ..., segmented AS ...):</label>
+            <textarea id='custom_col_3a_sql' class='sql-input' style='height:200px;'
+                placeholder="WITH risk_scored AS (&#10;  SELECT customer_id, customer_name,&#10;    default_count * 30 + (900 - cibil_score) / 10 AS risk_score,&#10;    cibil_score, default_count, annual_income&#10;  FROM customer_summary&#10;),&#10;segmented AS (&#10;  SELECT *, CASE&#10;    WHEN risk_score > 80 THEN 'Critical'&#10;    WHEN risk_score > 50 THEN 'High Risk'&#10;    WHEN risk_score > 25 THEN 'Emerging'&#10;    ELSE 'Situational'&#10;  END AS borrower_segment&#10;  FROM risk_scored&#10;)&#10;SELECT * FROM segmented ORDER BY risk_score DESC;"></textarea>
+        </div>
+        <div class='input-group'>
+            <label>Your collection_approach (must reference portfolio average via subquery):</label>
+            <textarea id='custom_col_3b_sql' class='sql-input'
+                placeholder="CASE&#10;  WHEN risk_score > (SELECT AVG(risk_score) FROM risk_scored) AND borrower_segment = 'Critical' THEN 'Legal Escalation'&#10;  WHEN risk_score > (SELECT AVG(risk_score) FROM risk_scored) THEN 'Settlement Offer'&#10;  WHEN borrower_segment = 'Situational' THEN 'Restructuring Call'&#10;  ELSE 'Standard Follow-Up'&#10;END AS collection_approach"></textarea>
+        </div>
+        <div class='input-group'>
+            <label>Why is a CTE pipeline better than a single nested CASE? (2-3 sentences):</label>
+            <textarea id='custom_col_3_justification' class='text-input'
+                placeholder='CTEs produce a readable, testable pipeline. You can SELECT * FROM risk_scored to debug.'></textarea>
+        </div>
+    </div>
+
+    <div class='why-gate-section'>
+        <h3>BEFORE YOU SUBMIT — Answer These Three Questions</h3>
+        <div class='input-group'>
+            <div class='why-question'>1. If you added employment_type as a third factor in borrower_segment — would any
+                customers move to a different segment? Pick one specific customer and show the re-classification logic.
+            </div>
+            <textarea id='why_3_1' class='text-input' placeholder='Your answer...'></textarea>
+        </div>
+        <div class='input-group'>
+            <div class='why-question'>2. Your top 50 list: the collections team can make 200 calls per week. How do you
+                prioritise the order within your top 50? Is priority_score alone sufficient?</div>
+            <textarea id='why_3_2' class='text-input' placeholder='Your answer...'></textarea>
+        </div>
+        <div class='input-group'>
+            <div class='why-question'>3. Write the "Riskiest Borrower Profile" paragraph. Describe the type of customer
+                who appears most frequently in your top segment.</div>
+            <textarea id='why_3_3' class='text-input' style='min-height:120px;'
+                placeholder='Describe the profile in 4–6 sentences.'></textarea>
+        </div>
+    </div>
+
+    <!-- ENGINEER'S LENS V2 -->
+    <div class="engineers-lens-container" style="margin-top: 40px; border-top: 2px solid #333; padding-top: 20px;">
+        <h3 style="color: #1a202c; letter-spacing: 1px; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+            THE ENGINEER'S LENS: PHASE 3
+        </h3>
+        
+        <div class="lens-grid">
+            <div class="lens-item">
+                <label>SQL Pattern</label>
+                <code style="display:block; background:#f4f4f4; padding:8px; border-radius:4px; font-size:12px; margin-bottom:10px;">
+                    CASE WHEN cibil > 700 <br>THEN 'Prime' ELSE 'Subprime' END
+                </code>
+                <label>PySpark Equivalent</label>
+                <code style="display:block; background:#2d3748; color:#a5d6ff; padding:8px; border-radius:4px; font-size:12px;">
+                    df.withColumn("bucket", <br>&nbsp;&nbsp;when(col("cibil") > 700, "Prime")<br>&nbsp;&nbsp;.otherwise("Subprime"))
+                </code>
+            </div>
+            
+            <div class="lens-item">
+                <label>Scale & Automation</label>
+                <p>CTEs aren't just for organization. In Spark's <strong>Catalyst Optimizer</strong>, named expressions are evaluated to create a Logical Plan. At 500k rows, modularizing your feature engineering (like Risk Scores) ensures that the compute engine can optimize predicate pushdown efficiently.</p>
+                <p style="margin-top:10px; font-style:italic; font-size:12px; color:#718096;">Note: In enterprise ML pipelines, these CASE buckets often serve as the raw training labels for predictive risk models.</p>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-top: 20px;">
+            <label style="font-weight: 800; color: #2d3748;">Reflective Question for the Engineer:</label>
+            <div class="why-question">If you had to add 'Employment Type' as a third weighting factor in your CTE, which table would you join first? How does this addition change the 'Priority Score' when processed at scale across multiple data partitions?</div>
+            <textarea id="lens_phase_3" class="text-input" placeholder="Think like an engineer—how do you modularly add new weighted factors to your CTE pipeline?"></textarea>
+        </div>
+    </div>
+
+    <div class='floating-action'>
+        <button class='btn-reset' type='button'
+            onclick='if(confirm("Clear all?")) { document.getElementById("assessmentForm").reset(); clearExtras(); }'>
+            Clear</button>
+        <button class='btn-download' type='button' onclick='generateReport()'>Download Submission (.html)</button>
+    </div>
+    <div class='page-footer'>
+        <p><strong>© 2025 Skill AI Path. All Rights Reserved.</strong></p>
+        <p>Created by: Viresh Gendle | tech@skillaipath.com | skillaipath.com</p>
+    </div>
+
+    <script>
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            if (input.files && input.files[0]) { const r = new FileReader(); r.onload = e => { preview.innerHTML = '<img src="' + e.target.result + '" />'; }; r.readAsDataURL(input.files[0]); } else { preview.innerHTML = ''; }
+        }
+        function clearExtras() { ['custom_col_3a_sql', 'custom_col_3b_sql', 'custom_col_3_justification', 'why_3_1', 'why_3_2', 'why_3_3'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
+        function generateReport() {
+            var name = (document.getElementById('studentName') || {}).value || 'Unknown';
+            var email = (document.getElementById('studentEmail') || {}).value || 'No Email';
+            var now = new Date().toLocaleString();
+            var h = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>EduFin Submission — Wednesday</title>';
+            h += '<style>body{font-family:Segoe UI,sans-serif;max-width:920px;margin:0 auto;padding:30px;background:#f5f7fa;color:#333}.hdr{background:linear-gradient(135deg,#6c3483,#e74c3c);color:#fff;padding:28px 32px;border-radius:12px;margin-bottom:28px}.hdr h1{margin:0 0 6px 0;font-size:1.6em}.hdr p{margin:4px 0;opacity:.85;font-size:.95em}.card{background:#fff;border:1px solid #e1e8ed;padding:20px 24px;border-radius:10px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.05)}.card h3{margin:0 0 12px 0;color:#6c3483;font-size:1em;border-bottom:2px solid #8e44ad;padding-bottom:8px}pre{background:#1e2a38;color:#e8f0fe;padding:16px;border-radius:8px;font-family:Courier New,monospace;font-size:12.5px;overflow-x:auto;white-space:pre-wrap;margin:8px 0}.ans{background:#f8fafb;border-left:4px solid #27ae60;padding:12px 16px;border-radius:0 6px 6px 0;font-size:.93em;line-height:1.7;margin:8px 0}.custom{background:#f0faf4;border:2px solid #27ae60;padding:20px 24px;border-radius:10px;margin-bottom:18px}.why{background:#fff5f5;border:2px solid #c0392b;padding:20px 24px;border-radius:10px;margin-bottom:18px}.footer{text-align:center;color:#7f8c8d;border-top:1px solid #dde;padding:20px;margin-top:30px;font-size:.88em}.img-wrap{margin:10px 0}.img-wrap img{max-width:100%}</style></head><body>';
+            h += '<div class="hdr"><h1>EduFin SQL Business Challenge</h1><p>Phase 3 — Wednesday Submission</p><p>Student: <strong>' + name + '</strong> | ' + email + '</p><p>Submitted: ' + now + '</p></div>';
+            document.querySelectorAll('.sql-input').forEach(el => {
+                if(el.id.includes('custom')) return;
+                const section = el.closest('.section');
+                const label = section ? section.querySelector('h3').textContent : el.id;
+                let imgHtml = '';
+                if(section) {
+                    const img = section.querySelector('.image-preview img');
+                    if(img && img.src) {
+                        imgHtml = '<div class="img-wrap"><img src="' + img.src + '"/></div>';
+                    }
+                }
+                h += '<div class="card"><h3>' + label + '</h3><pre>' + (el.value || '') + '</pre>' + imgHtml + '</div>';
+            });
+            h += '<div class="custom"><h3>Custom Column</h3><pre>' + document.getElementById('custom_col_3a_sql').value + '\n\n' + document.getElementById('custom_col_3b_sql').value + '</pre><div class="ans">' + document.getElementById('custom_col_3_justification').value + '</div></div>';
+            h += '<div class="why"><h3>WHY Gate</h3>';
+            document.querySelectorAll('.why-gate-section textarea').forEach(el => {
+                const q = el.closest('.input-group').querySelector('.why-question').textContent;
+                h += '<p><strong>' + q + '</strong></p><div class="ans">' + el.value + '</div>';
+            });
+            h += '</div><div class="footer"><p>© 2025 Skill AI Path</p></div></body></html>';
+            const blob = new Blob([h], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Phase3_Submission.html'; a.click();
+        }
+    </script>
+
+    <!-- Enhancement JS v2 -->
+    <div class="autosave-indicator" id="autosaveIndicator">Draft saved</div>
+    <script>
+        (function () {
+            var PHASE = '3';
+            var STORAGE_PREFIX = 'edufin_v1_phase3_';
+            var banner = document.createElement('div');
+            banner.className = 'day-banner';
+            banner.innerHTML = '<span class="day-label">DAY 3 OF 5</span><span class="day-dots"><span class="dot done"></span><span class="dot done"></span><span class="dot current"></span><span class="dot"></span><span class="dot"></span></span>';
+            document.body.prepend(banner);
+            if (localStorage.getItem('edufin_darkmode') === 'true') document.body.classList.add('dark-mode');
+        })();
+    </script>
+</body>
+
+</html>

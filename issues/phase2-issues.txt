@@ -1,0 +1,187 @@
+HASE 2 REVIEW –  FEEDBACK 1
+
+OVERALL ASSESSMENT
+
+Good implementation across all queries with solid understanding of joins, aggregations, and conditional logic. Queries will run successfully. However, there are BRD misalignments, incorrect Query 2D approach, and incomplete decision logic in Query 2E, which impacts business-level accuracy.
+
+STRENGTHS
+
+✅ Correct joins with customers and dim_city
+✅ Proper use of CASE WHEN for default calculations
+✅ Correct use of HAVING COUNT(*) >= 100
+✅ Financial exposure logic (2C, 2E) is well implemented
+✅ Good use of formatting (Cr/L conversion)
+✅ WHY Q3 shows strong business reasoning
+
+
+ISSUE BREAKDOWN
+
+CRITICAL ISSUES 🔴
+
+Query 2D – Incorrect Implementation (Mixed Logic)
+
+What You Did:
+
+Applied city-level classification + filtering only high-risk cities
+Filtered only 'Critical' and 'High Risk' → removes full distribution view
+
+Why This Is Wrong:
+
+BRD allows:
+
+City classification (ALL cities) OR
+State-level rollup
+Your approach: filtered subset instead of complete distribution
+
+Expected:
+
+Show complete risk distribution, not filtered subset
+Include ALL cities with their classifications
+
+Query 2E – Missing Window Functions in Final Query
+
+What You Did:
+
+Created RANK() and NTILE() separately
+Window functions exist in isolation, not integrated into final output
+
+Why This Is Wrong:
+
+BRD requires decision dashboard in ONE query
+Separate queries break the integrated decision framework
+
+Expected:
+
+Integrate within final query:
+
+exposure_rank
+risk_quartile
+
+Single comprehensive output for decision-making
+
+WRONG LOGIC / INCORRECT METRICS 🟠
+
+WHY Q1 – Incorrect Business Interpretation
+
+What You Said:
+
+No city moved in/out (only order changed)
+
+Why This Is Wrong:
+
+In correct analysis:
+
+Exposure-based ranking vs rate-based ranking changes cities
+
+Not just order rearrangement
+
+Different ranking criteria = different cities in top N
+
+Impact:
+
+Weak understanding of CFO priority (₹ vs %)
+Misses the core business point about shifting focus
+
+
+MISSING REQUIREMENTS 🟡
+
+Query 2A:
+
+Missing: total_customers
+Missing: % of portfolio
+
+Query 2C:
+
+Missing: loss_rate %
+
+Query 2D:
+
+Missing: full city coverage (filtered output instead)
+Missing: total_loans
+
+Query 2E:
+
+Missing: total_customers
+Missing: exposure_rank in main query
+Missing: risk_quartile in main query
+
+MINOR ISSUES 🟢
+
+Code Quality:
+
+Unnecessary CAST + REPLACE for sorting percentages
+Overuse of formatting inside SQL (can be simplified)
+
+Slight redundancy in repeated calculations
+
+Naming:
+
+Inconsistent column naming (Values, Value)
+Reduces readability and standardization
+
+WHY GATE EVALUATION
+
+Q1 – Exposure vs Rate Impact
+
+Status: ❌ Incorrect
+
+Misinterpreted impact → cities should change, not just order
+Different ranking methodology brings different cities into focus
+
+Q2 – Outlier City Analysis
+
+Status: ⚠️ Weak
+
+No city named → lacks statistical reasoning
+Missing concrete examples from data
+
+Q3 – Priority City Selection
+
+Status: ✅ Good
+
+Strong justification using rate + exposure balance
+Clear business reasoning
+
+PRIORITY FIX ORDER
+
+1. Fix Query 2D (Critical)
+
+Action Required:
+
+Remove filtering logic
+Show full classification for ALL cities
+Include complete risk distribution (not just Critical/High Risk)
+
+2. Correct WHY Q1 (Critical)
+
+Action Required:
+
+Understand exposure vs rate impact
+Explain how different ranking criteria change which cities appear
+Not just reordering - different cities entirely
+
+3. Integrate Window Functions into Query 2E
+
+Action Required:
+
+Add RANK() for exposure ranking within final query
+Add NTILE() for risk quartile within final query
+
+Create single integrated decision table
+
+4. Add Missing Metrics
+
+Action Required:
+
+Query 2A: Add total_customers and % of portfolio
+Query 2C: Add loss_rate %
+Query 2D: Add total_loans and full city coverage
+Query 2E: Add total_customers, exposure_rank, risk_quartile
+
+5. Simplify Formatting and Reduce Redundancy
+
+Action Required:
+
+Remove unnecessary CAST + REPLACE operations
+Standardize column naming
+Simplify formatting logic where possible

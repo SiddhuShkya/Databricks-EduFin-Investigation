@@ -164,3 +164,189 @@ Query 4A: Either rename to Basic Volume Metrics (matches what you actually calcu
 Gate Status: Phase 4 COMPLETE with corrections needed ✅
 
 Queries 4B-4E are correct with proper thresholds and filters. Query 4A and 4C need metric additions to match BRD requirements. WHY Gates show strong business reasoning and comprehensive suspension justification with specific metrics and action plans. Custom column demonstrates advanced analytical thinking with portfolio-relative classifications.
+
+---
+
+What You Did Well
+
+✅ Query 1A - Portfolio Status Distribution correct, avoided Guide trap
+
+✅ Query 1B - Used DISTINCT customer_id, avoided Guide trap
+
+✅ Query 1C - Perfect PAR calculation with Defaulted + Overdue
+
+✅ Query 1E - Strong dashboard structure with risk classifications
+
+✅ Avoided divisor trap in 1D (correct 10000000)
+
+What Needs Fixing
+
+🔴 Query 1D - Missing Status Breakdown
+
+You showed: One combined number Total Portfolio at Risk Value
+
+BRD asks for: Total monetary value at risk FOR EACH status category
+
+Fix: Show four separate lines - Active Loan Value, Closed Loan Value, Defaulted Loan Value, Overdue Loan Value (all in Crores)
+
+🔴 Query 1E - Missing Executive Summary
+
+You showed: SQL output with comprehensive metrics
+
+BRD asks for: REQUIRED Text Summary interpreting severity of 11.8% default rate, financial implications of losses, viability of active portfolio
+
+Fix: Add 3-4 sentences below your query explaining what these numbers mean for the Board in plain business language
+
+🟡 WHY Gate Q1 - Wrong Reasoning
+
+You said: BRD instructs to include capital under stress so I added Overdue
+
+Reality: Query 1C defines PAR as Defaulted + Overdue (you did this correctly). Query 1D asks for each status category value separately, not combined PAR
+
+Fix: Change answer to acknowledge Query 1D needs status breakdown, not PAR aggregation
+
+Fix Priority
+
+Add status breakdown to Query 1D (Active, Closed, Defaulted, Overdue values)
+
+Add executive text summary after Query 1E output
+
+Revise WHY Gate Q1 answer
+
+---
+
+PHASE 1 REVIEW –  FEEDBACK 2
+
+
+OVERALL ASSESSMENT
+
+Your submission demonstrates strong understanding of portfolio segmentation, percentage calculations, and dashboard structuring. Most queries are logically correct and aligned with BRD intent. However, there is a critical misinterpretation in Query 1D (Financial Impact definition) and a conceptual mismatch in WHY Q1, along with a few minor clarity issues.
+
+
+STRENGTHS
+
+✅ Correct implementation of status distribution with % (1A)
+✅ Proper portfolio metrics with correct units (1B)
+✅ Correct calculation of Default Rate and Portfolio at Risk (1C)
+✅ Strong comprehensive dashboard structure (1E)
+✅ Correct use of health classification thresholds (5%, 10%, 15%)
+✅ Good reasoning in WHY Q2 and Q3
+
+ISSUE BREAKDOWN
+
+CRITICAL ISSUES 🔴
+
+Query 1D – Incorrect Interpretation of Financial Impact (At-Risk Definition)
+
+Issue:
+
+You calculated loan value for each status separately (Active, Closed, Defaulted, Overdue)
+However, BRD requirement is clear: Financial Impact = Total At-Risk Value (Defaulted + Overdue combined)
+
+Why This Is Wrong:
+
+Your query does not directly provide the total at-risk exposure required for decision-making
+It forces interpretation instead of giving a single actionable number
+Board cannot immediately see total capital under threat
+
+
+Expected:
+
+A single aggregated metric combining Defaulted + Overdue in Crores
+Direct answer to: "How much capital is at risk right now?"
+
+WRONG LOGIC / INCORRECT METRICS 🟠
+
+WHY Q1 – Conceptual Misalignment
+
+Issue:
+
+You stated that showing values separately gives better clarity
+While this is analytically valid, it does not follow BRD definition
+
+BRD Requirement:
+
+Financial Impact must explicitly show combined At-Risk value
+
+Why This Is Wrong:
+
+Your reasoning contradicts the required business definition
+Separating the values is analysis, not the defined "Financial Impact" metric
+
+
+MISSING REQUIREMENTS 🟡
+
+Query 1D:
+
+Missing: Single Total At-Risk Value (Defaulted + Overdue combined)
+Current output shows segmented values instead of required aggregate metric
+
+MINOR ISSUES 🟢
+
+Query 1C:
+
+Including Active and Closed counts is extra (not required but acceptable)
+Adds context but beyond minimum scope
+
+Naming Inconsistencies:
+
+Loan Value (Cr) vs standard naming like At Risk Value
+Minor variation but affects clarity
+
+Documentation:
+
+Custom column logic is fine but slightly over-explained for Phase 1 scope
+
+
+WHY GATE EVALUATION
+
+Q1 – Financial Impact Definition
+
+Status: ❌ Incorrect
+
+Must explicitly state Defaulted + Overdue combined, not separate exposure
+Current explanation contradicts BRD requirement
+
+Q2 – Systemic Risk Identification
+
+Status: ✅ Correct
+
+PAR (17.26%) used correctly as systemic indicator
+Proper understanding of portfolio-level risk metrics
+
+Q3 – Most Important Metric
+
+Status: ✅ Correct
+
+Default Rate (11.80%) correctly identified
+Aligned with BRD priorities and business context
+
+PRIORITY FIX ORDER
+
+1. Fix Query 1D (Critical)
+
+Action Required:
+
+Replace segmented output with single At-Risk value (Defaulted + Overdue)
+Calculate: Total At-Risk Value = SUM(loan_amount) WHERE status IN ('Defaulted', 'Overdue')
+
+Display in Crores with proper formatting
+
+2. Correct WHY Q1 Explanation
+
+Action Required:
+
+Align strictly with BRD definition of At-Risk
+Explain why combined value is the correct Financial Impact metric
+
+Remove reasoning that contradicts BRD requirement
+
+3. Improve Naming Consistency (Optional)
+
+Action Required:
+
+Standardize metric names across queries
+Use: At Risk Value (Cr) consistently
+Align with BRD terminology
+
+

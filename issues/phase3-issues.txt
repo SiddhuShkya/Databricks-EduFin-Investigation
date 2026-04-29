@@ -1,0 +1,34 @@
+PRIORITY FIX ORDER
+
+🔴 1. Query 3E: Missing Priority Cutoff
+
+Your query returns ALL defaulted customers (likely 500+ rows)
+Question: Collections team has limited capacity - should they call everyone or focus on highest-priority cases? What does Guide suggest about list size?
+
+Hint: Check if your final SELECT needs a row limit
+
+🟡 2. WHY Q1: Segmentation Logic Confusion
+
+You said: "customer_id 3102 would move from Fair (550-700) to Medium Risk after adding employment_type"
+Question: What creates your borrower_segment classification? Is it CIBIL brackets or NTILE(3) based on risk_score? If employment_type changes risk_score, how does that cascade?
+
+Hint: Trace through your CTEs - which CTE creates borrower_segment and what input does it use?
+
+🟡 3. WHY Q2: Implementation Gap
+
+You answered: "priority score not enough, should consider defaulted amount, defaults, CIBIL, employment"
+Question: Does your Query 3E ORDER BY use all these factors, or just risk_score? Does your answer match your implementation?
+
+STRENGTHS
+
+Query 3A scale comparison (small vs national) shows good analytical depth
+Query 3E CTE structure clean with multi-stage risk scoring
+Consistent segment-level analysis thread (3A-3D) then customer-level (3E)
+Proper Crores/Lakhs conversion with units throughout
+Window functions (NTILE, AVG OVER) used correctly
+
+NEXT STEP
+
+Add LIMIT to Query 3E for actionable focus. Clarify WHY Q1 by tracing how employment_type would change risk_score → segment. Align WHY Q2 answer with actual ORDER BY clause.unit s
+
+🟡 NEEDS ITERATION - 1 red flag (missing list limit), 2 yellow flags (conceptual clarity). Strong CTE design and consistent analytical approach show solid foundation. Fix prioritization logic and WHY Gate reasoning clarity.

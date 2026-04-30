@@ -32,3 +32,70 @@ NEXT STEP
 Add LIMIT to Query 3E for actionable focus. Clarify WHY Q1 by tracing how employment_type would change risk_score → segment. Align WHY Q2 answer with actual ORDER BY clause.unit s
 
 🟡 NEEDS ITERATION - 1 red flag (missing list limit), 2 yellow flags (conceptual clarity). Strong CTE design and consistent analytical approach show solid foundation. Fix prioritization logic and WHY Gate reasoning clarity.
+
+PHASE 3 PERFORMANCE: DEVELOPING
+
+🔴 CRITICAL ISSUES
+
+Query 3E - Output Structure and BRD Compliance
+
+Issue: The final output for Query 3E is not strictly customer-level. The output includes segmentation logic (NTILE, borrower_segment, collection_approach) and does not strictly follow the BRD/Guide requirement to return only actionable customer-level records (customer_id, name, contact, defaulted amount, priority score). The output is more of a risk segment summary than a direct collections target list.
+
+Impact: This violates the BRD's CRITICAL OUTPUT REQUIREMENT for Query 3E, which must return a customer-level actionable list, not a segment summary.
+
+Query 3E - Priority Score Calculation
+
+Issue: The risk_score formula is not the BRD/Guide standard (priority_score = default_rate * total_defaulted_amount). Instead, it uses a custom weighted formula with arbitrary weights and includes annual_income and CIBIL, which is not BRD-aligned.
+
+Impact: This is a logic deviation from the required priority score, which must be based on default rate and exposure.
+
+
+🟡 WRONG LOGIC / FORMATTING
+
+Query 3A - No HAVING COUNT(*) >= 100
+
+Issue: The scale shift queries do not filter out cities with fewer than 100 loans, which is required for statistical significance in the Guide version.
+Impact: May include noisy/small-sample cities, reducing reliability.
+
+Query 3B/3C - CIBIL Band Ranges
+
+Issue: CIBIL bands are non-standard and overlapping (e.g., 'Fair (550-700)' instead of 'Fair (550-649)', 'Good (701-750)' instead of 'Good (650-749)', 'Excellent (751+)' instead of 'Excellent (750-900)').
+Impact: Customers may be misclassified into the wrong risk bands, which affects all downstream analysis.
+
+Query 3D - Typo in Column Name
+
+Issue: employemnet_type is misspelled; should be employment_type.
+Impact: Will cause SQL errors or missing data.
+
+Query 3D - Formatting
+
+Issue: Uses string concatenation for currency (e.g., ' Cr', ' L') in main query, which is discouraged. Percentages are formatted as strings, not numeric.
+Impact: Reduces downstream usability and violates formatting best practices.
+
+Query 3E - No Contact Fields
+
+Issue: The output does not include customer contact fields (email, phone), which are required for collections action.
+Impact: Collections team cannot directly use the output.
+
+
+📋 PRIORITY FIX ORDER
+
+Query 3E: Output must be customer-level, not segment summary.
+Query 3E: Use BRD/Guide priority score formula (default_rate * total_defaulted_amount).
+Query 3E: Add contact fields (email, phone) to output.
+Query 3A: Add HAVING COUNT(*) >= 100 for city-level analysis.
+Query 3B/3C: Use standard, non-overlapping CIBIL bands.
+Query 3D: Fix column typo and remove string concatenation in numeric columns.
+
+
+🎯 OVERALL
+
+The submission demonstrates strong SQL skills and creative use of CTEs and window functions, but fails to meet BRD requirements for Query 3E (customer-level actionable list, correct priority score, contact fields). CIBIL band logic is non-standard and may misclassify risk. Formatting and output structure issues further reduce practical value for business users.
+
+✅ STRENGTHS
+
+Good use of CTEs and window functions for risk segmentation and scoring.
+Attempts a creative, multi-factor risk score and collection strategy.
+All queries are executable and logically structured.
+WHY Gate answers show understanding of risk drivers and prioritization logic.
+Output includes actionable recommendations for collections, even if not strictly BRD-aligned.

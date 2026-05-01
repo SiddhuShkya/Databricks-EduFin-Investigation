@@ -40,13 +40,11 @@ PHASE 3 PERFORMANCE: DEVELOPING
 Query 3E - Output Structure and BRD Compliance
 
 Issue: The final output for Query 3E is not strictly customer-level. The output includes segmentation logic (NTILE, borrower_segment, collection_approach) and does not strictly follow the BRD/Guide requirement to return only actionable customer-level records (customer_id, name, contact, defaulted amount, priority score). The output is more of a risk segment summary than a direct collections target list.
-
 Impact: This violates the BRD's CRITICAL OUTPUT REQUIREMENT for Query 3E, which must return a customer-level actionable list, not a segment summary.
 
 Query 3E - Priority Score Calculation
 
 Issue: The risk_score formula is not the BRD/Guide standard (priority_score = default_rate * total_defaulted_amount). Instead, it uses a custom weighted formula with arbitrary weights and includes annual_income and CIBIL, which is not BRD-aligned.
-
 Impact: This is a logic deviation from the required priority score, which must be based on default rate and exposure.
 
 

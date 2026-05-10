@@ -1,0 +1,96 @@
+PHASE 4 PERFORMANCE:
+
+Good SQL structure and excellent WHY Gate reasoning, but several BRD requirements are missing or incorrectly implemented.
+
+PRIORITY FIX ORDER
+
+🔴 1. Query 4A & 4E — Wrong Partner Health Score Formula
+You used a custom weighted formula, but BRD requires:
+(1 - default_rate_pct/100) × volume_multiplier × 100
+
+Need to use:
+
+=200 loans → 1.5
+
+=50 loans → 1.0
+
+else → 0.5
+
+🔴 2. Query 4D — Wrong Output
+Current query shows threshold summary counts.
+BRD requires institution-level risk classification:
+
+Critical Risk
+
+High Risk
+
+Monitor
+
+Safe
+
+Need institution_name, institution_type, default_rate_pct, risk_category.
+
+🔴 3. Missing Schema References
+Use full schema names everywhere:
+
+edufin_analytics.dim_institution
+
+edufin_analytics.edufin_national
+
+🟡 4. Query 4B Missing HAVING Filter
+Add:
+HAVING COUNT(l.loan_id) >= 50
+
+Without this, low-volume institutions create unreliable risk signals.
+
+🟡 5. Query 4A Missing Columns
+Need:
+
+COUNT(DISTINCT customer_id)
+
+institution_type
+
+🟡 6. Query 4C Missing At-Risk Exposure
+Need combined exposure for:
+
+Defaulted
+
+Overdue
+
+🟡 7. Query 4E Wrong Partner Flag Logic
+Current adaptive threshold logic is analytically strong, but BRD requires fixed thresholds:
+
+15% → Blacklist
+
+10% → Monitor Closely
+
+Else → Expand
+
+🟢 Minor Issues
+
+Query 4E uses >50 instead of >=50
+
+Missing institution_type in 4B & 4E
+
+Small formatting inconsistencies
+
+STRENGTHS
+
+✅ Excellent WHY Gate answers
+✅ Strong business reasoning and strategic thinking
+✅ Clean CTE structure
+✅ Good anomaly detection mindset
+✅ Proper NULLIF defensive coding
+✅ Production-oriented analytical thinking
+
+NEXT STEPS
+
+1️⃣ Add schema qualifiers everywhere
+2️⃣ Replace health score formula with BRD version
+3️⃣ Rewrite Query 4D completely
+4️⃣ Add HAVING >=50 in 4B
+5️⃣ Add missing columns in 4A
+6️⃣ Add at-risk exposure in 4C
+7️⃣ Replace adaptive logic in 4E with BRD thresholds
+
+Your analytical thinking is very strong. Main issue is BRD alignment, not SQL capability.

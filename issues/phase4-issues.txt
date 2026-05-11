@@ -84,3 +84,127 @@ NEXT STEPS
 7️⃣ Replace adaptive logic in 4E with BRD thresholds
 
 Your analytical thinking is very strong. Main issue is BRD alignment, not SQL capability.
+
+---
+
+Feedback — Phase 4 Review
+
+There is strong improvement in analytical thinking and business reasoning compared to the previous submission. Several earlier technical gaps have been fixed successfully, especially around Query 4B, Query 4C, and the WHY Gate explanations. Your portfolio-level interpretation and governance thinking are strong.
+
+However, some outputs still do not align fully with the BRD-defined framework. The main remaining issue is no longer SQL capability — it is BRD compliance versus custom business interpretation.
+
+Major Improvements Observed
+
+Query 4B — Reliability Filter Fixed ✅
+
+You correctly added:
+
+HAVING COUNT(l.loan_id) >= 50
+This fixes the earlier statistical reliability issue and improves governance quality significantly.
+
+Query 4C — At-Risk Exposure Logic Improved ✅
+
+You now correctly include:
+
+overdue exposure
+defaulted exposure
+combined at-risk exposure
+This aligns much better with institutional financial-risk analysis.
+
+Query 4D — Institution-Level Classification Added ✅
+
+The earlier issue of missing institution-level governance output has been fixed.
+You now correctly provide:
+
+institution_name
+institution_type
+default_rate
+risk classification
+
+This is a clear structural improvement.
+
+WHY Gate — Strong Business Reasoning ✅
+
+Your WHY Gate answers are one of the strongest parts of the submission.
+
+Especially:
+
+portfolio-relative reasoning
+governance interpretation
+executive-level thinking
+suspension justification structure
+
+These demonstrate strong analytical maturity.
+
+Remaining Important Issues
+
+🔴 Query 4A & 4E — BRD Multiplier Thresholds Still Incorrect
+
+You corrected the overall health-score formula structure, which is a major improvement from the previous submission.
+However, the multiplier thresholds still do not follow BRD requirements.
+
+Current logic:
+
+>=10000 → 1.5
+>=9500 → 1.0
+else 0.5
+
+BRD-required logic:
+
+>=200 → 1.5
+50–199 → 1.0
+<50 → 0.5
+
+Your thresholds are analytically reasonable from a dataset perspective, but the assignment evaluation is based on implementing the governance logic exactly as defined in the BRD.
+
+So this is not a business-thinking issue — it is a BRD compliance issue.
+
+🔴 Query 4E — Final Dashboard Still Missing Governance Filter
+
+The final partner dashboard still does not apply:
+
+HAVING COUNT(l.loan_id) >= 50
+This means low-volume institutions may still enter final governance evaluation.
+
+Even though your explanations discuss governance thresholds correctly, the actual dashboard implementation does not fully enforce them.
+
+🟡 Query 4D & 4E — Custom Risk Categories vs BRD Categories
+
+Your classification framework:
+
+Critical Risk
+High Risk
+Monitor
+Safe
+
+is business-logically sensible.
+
+However, the BRD expected a fixed governance output structure:
+
+Blacklist
+Monitor Closely
+Expand
+
+So the issue here is not that your logic is “wrong.”
+The issue is that you changed the required operational framework defined by the business document.
+
+This should be treated as:
+
+strong analytical interpretation
+but partial BRD misalignment
+rather than a pure logic failure.
+
+🟡 Query 4A — Integer Division Risk
+
+You calculated:
+
+(default_count / loan_count) * 100
+
+Since both fields are integers, some SQL engines may truncate decimals before multiplication.
+Use decimal conversion (100.0 or CAST) to ensure accurate percentage calculation.
+
+🟡 Custom Column Section — Strong Reasoning but Incomplete SQL
+
+Your portfolio-relative threshold explanation is analytically strong and professionally reasoned.
+However, the SQL implementation itself is incomplete and not fully executable as a standalone query section.
+The business interpretation is good, but implementation completeness is still expected.

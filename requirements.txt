@@ -1,2 +1,4 @@
 ipykernel
 pyspark
+pandas
+matplotlib

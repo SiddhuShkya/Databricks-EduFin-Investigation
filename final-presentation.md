@@ -16,22 +16,13 @@
 
 ---
 
-> "Phase 1 answered the CEO's first question: *How big is our portfolio, and how much have we lost?*
->
-> Here are the numbers:
-> - EduFin has **5,000 loans** disbursed across **3,000 customers**, with a total portfolio value of **₹204.82 Crores** and an average loan size of **₹4.1 Lakhs**.
->
-> Now, the crisis:
-> - **590 loans** have defaulted — that's **11.80%** of the portfolio. The industry benchmark for education loans is **5–8%**. We are nearly **double** the upper limit.
-> - In financial terms, **₹24.24 Crores** is already lost to defaults.
-> - Another **273 loans** worth **₹10.94 Crores** are overdue and at imminent risk of defaulting.
-> - Combined, **₹35.18 Crores — 17.26% of the entire portfolio** — is at risk.
->
-> I classified the portfolio health as **HIGH RISK**, just **0.20 percentage points** away from the crisis threshold of 12%. This is not a temporary market shock — the 3.4% loan closure rate tells us it's a **systemic origination failure**. My recommendation was to activate crisis protocols immediately."
-
--> **Phase 1: Reference Dashboard**
+> Portfolio Health Check Dashboard
 
 ```text
+════════════════════════════════════════════
+══> PORTFOLIO HEALTH CHECK DASHBOARD <══════
+════════════════════════════════════════════
+
 +----------------------------+-------------+
 | Metric                     | Value       |
 +----------------------------+-------------+
@@ -57,32 +48,30 @@
 +----------------------------+-------------+
 ```
 
+> Phase 1 answered the CEO's first question: *How big is our portfolio, and how much have we lost?*
+
+Here are the numbers:
+- EduFin has **5,000 loans** disbursed across **3,000 customers**, with a total portfolio value of **₹204.82 Crores** and an average loan size of **₹4.1 Lakhs**.
+
+Now, the crisis:
+- **590 loans** have defaulted — that's **11.80%** of the portfolio. The industry benchmark for education loans is **5–8%**. We are nearly **double** the upper limit.
+- In financial terms, **₹24.24 Crores** is already lost to defaults.
+- Another **273 loans** worth **₹10.94 Crores** are overdue and at imminent risk of defaulting.
+- Combined, **₹35.18 Crores — 17.26% of the entire portfolio** — is at risk.
+
+*I classified the portfolio health as **HIGH RISK**, just **0.20 percentage points** away from the crisis threshold of 12%. This is not a temporary market shock — the 3.4% loan closure rate tells us it's a **systemic origination failure**. My recommendation was to activate crisis protocols immediately."*
 
 ### 🗺️ Phase 2 — Geographic Risk Analysis 
 
 ---
 
-> "Phase 2 drilled down geographically. The CEO asked: *Which cities are bleeding money?*
->
-> I joined the loans data with geographic tables and ranked every city by an **Exposure Score** — a composite of default rate multiplied by portfolio size — to identify where EduFin is losing the most capital.
->
-> The worst-hit cities:
-> - **Pune** — highest default rate at **20.13%**, with **₹1.14 Crores** in losses.
-> - **Ranchi** — highest exposure score overall, **17.86%** default rate, **₹1.40 Crores** lost.
-> - **Lucknow** — the largest portfolio at risk with **₹7.51 Crores** deployed and a **13.97%** default rate.
->
-> In total, **8 out of 15 cities** were classified as **Critical** — meaning default rates above 15%.
->
-> My recommendation was a **tiered halt strategy**:
-> - **Tier 1** — Halt lending immediately in Ranchi, Pune, and Lucknow.
-> - **Tier 2** — Halt within 30 days in Indore, Jaipur, Ahmedabad, and Kochi, pending investigation.
-> - **Tier 3** — Enhanced monitoring for the remaining high-risk cities like Delhi and Nagpur.
->
-> This isn't a one-size-fits-all crisis — it requires a **region-specific strategy**."
-
--> **Phase 2: Reference Dashboard**
+> Geographic Risk Analysis Dashboard
 
 ```text
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+══> GEOGRAPHIC RISK ANALYSIS DASHBOARD <════════════════════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
 +---------+-----+---------+---------------+---------------+-----------------+--------------+-------------+-------------+
 |     City|Loans|Customers|Portfolio Value|Defaulted Value|Default Rates (%)|Exposure Score|Exposure Rank|Risk Quartile|
 +---------+-----+---------+---------------+---------------+-----------------+--------------+-------------+-------------+
@@ -104,27 +93,37 @@
 +---------+-----+---------+---------------+---------------+-----------------+--------------+-------------+-------------+
 ```
 
+> Phase 2 drilled down geographically. The CEO asked: *Which cities are bleeding money?*
+
+I joined the loans data with geographic tables and ranked every city by an **Exposure Score** — a composite of default rate multiplied by portfolio size — to identify where EduFin is losing the most capital.
+
+The worst-hit cities:
+- **Pune** — highest default rate at **20.13%**, with **₹1.14 Crores** in losses.
+- **Ranchi** — highest exposure score overall, **17.86%** default rate, **₹1.40 Crores** lost.
+- **Lucknow** — the largest portfolio at risk with **₹7.51 Crores** deployed and a **13.97%** default rate.
+
+In total, **8 out of 15 cities** were classified as **Critical** — meaning default rates above 15%.
+
+My recommendation was a **tiered halt strategy**:
+- **Tier 1** — Halt lending immediately in Ranchi, Pune, and Lucknow.
+- **Tier 2** — Halt within 30 days in Indore, Jaipur, Ahmedabad, and Kochi, pending investigation.
+- **Tier 3** — Enhanced monitoring for the remaining high-risk cities like Delhi and Nagpur.
+
+*This isn't a one-size-fits-all crisis — it requires a **region-specific strategy**.*
+
 ---
 
 ### 👤 Phase 3 — Customer Risk Segmentation 
 
 ---
 
-> "Phase 3 moved from *where* the problem is to *who* is causing it. The Collections Manager needed a prioritized target list.
->
-> I built a **Priority Score** for every defaulting customer by combining three factors: **defaulted amount**, **number of defaults**, and **CIBIL score**. I then segmented borrowers into **Critical**, **High**, and **Medium** risk.
->
-> The top finding: **1 Critical customer** — Raghav Dubey — with **3 defaults**, **₹15.07 Lakhs** in losses, and a CIBIL score of just **486**. This is a serial defaulter requiring immediate legal escalation.
->
-> Below him, **12 High-risk customers** collectively owe over **₹1.16 Crores**, each with 2–3 defaults and 100% default rates.
->
-> I also profiled the **'Ideal High-Risk Borrower'** — typically someone with recurring defaults, exposure between ₹10–15 Lakhs, and weak repayment discipline regardless of income level.
->
-> Each customer in my output was mapped to a specific **collection action** — from aggressive daily calls and payment plans for High-risk, to recovery agency escalation for Critical. This gave the collections team a **daily call list**, not just a report."
-
--> **Phase 3: Reference Dashboard**
+> Customer Risk Segmnentation Dashboard
 
 ```text
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+══> CUSTOMER RISK SEGMENTATION DASHBOARD <═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
 +-----------+-----------------+------------+--------------------------------+----------------+-------------+----------------+-----------+--------------+------------+-------------------------------------------+
 |Customer ID|Name             |Contact     |Email                           |Defaulted Amount|Default Count|Default Rate (%)|CIBIL Score|Priority Score|Risk Segment|Recommend Action                           |
 +-----------+-----------------+------------+--------------------------------+----------------+-------------+----------------+-----------+--------------+------------+-------------------------------------------+
@@ -152,26 +151,29 @@
 only showing top 20 rows
 ```
 
+> Phase 3 moved from *where* the problem is to *who* is causing it. The Collections Manager needed a prioritized target list.
+
+I built a **Priority Score** for every defaulting customer by combining three factors: **defaulted amount**, **number of defaults**, and **CIBIL score**. I then segmented borrowers into **Critical**, **High**, and **Medium** risk.
+
+- The top finding: **1 Critical customer** — Raghav Dubey — with **3 defaults**, **₹15.07 Lakhs** in losses, and a CIBIL score of just **486**. This is a serial defaulter requiring immediate legal escalation.
+
+- Below him, **12 High-risk customers** collectively owe over **₹1.16 Crores**, each with 2–3 defaults and 100% default rates.
+
+- I also profiled the **'Ideal High-Risk Borrower'** — typically someone with recurring defaults, exposure between ₹10–15 Lakhs, and weak repayment discipline regardless of income level.
+
+Each customer in my output was mapped to a specific **collection action** — from aggressive daily calls and payment plans for High-risk, to recovery agency escalation for Critical. This gave the collections team a **daily call list**, not just a report."
+
 ### 🏛️ Phase 4 — Institutional Partnership Risk 
 
 ---
 
-> "Finally, Phase 4 asked the hardest question: *Which partner institutions are sending EduFin students who default?*
->
-> I scored every institution using a **Health Score** and classified them as **Blacklist**, **Monitor**, **Retain**, or **Reward** based on their default rates.
->
-> The results were striking:
-> - **13 institutions** were flagged for **Blacklist** — all with default rates above **15%**.
-> - The worst performer was **State Commerce Institute** — **20.87%** default rate with **₹83.96 Crores** in defaulted exposure. That alone is grounds for immediate contract suspension.
-> - 5 of the top 7 blacklist candidates were **Institutes**, suggesting a systemic quality issue with that institution type.
->
-> But there was also a positive outlier: **National Law Institute** had **0% defaults** despite processing over **10,000 loans**. My recommendation to the Partnership Director was — before suspending 13 bad partners, **study what National Law Institute is doing differently** in student screening and replicate it across the portfolio.
->
-> I prepared a legal-grade suspension justification for the top institution, including the threshold exceeded, total exposure, and post-suspension monitoring requirements."
-
--> **Phase 4: Reference Dashboard**
+> Institutional Partnership Risk Dashboard
 
 ```text
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+══> INSTITUTIONAL PARTNERSHIP RISK DASHBOARD <══════════════════════════════════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
 +--------------+--------------------------------+----------------+-----+---------+--------------+----------------+------------+------------+
 |Institution ID|Institution Name                |Institution Type|Loans|Customers|Default Amount|Default Rate (%)|Health Score|Partner Flag|
 +--------------+--------------------------------+----------------+-----+---------+--------------+----------------+------------+------------+
@@ -203,6 +205,19 @@ only showing top 20 rows
 +--------------+--------------------------------+----------------+-----+---------+--------------+----------------+------------+------------+
 only showing top 25 rows
 ```
+
+> Finally, Phase 4 asked the hardest question: *Which partner institutions are sending EduFin students who default?*
+
+I scored every institution using a **Health Score** and classified them as **Blacklist**, **Monitor**, **Retain**, or **Reward** based on their default rates.
+
+The results were striking:
+- **13 institutions** were flagged for **Blacklist** — all with default rates above **15%**.
+- The worst performer was **State Commerce Institute** — **20.87%** default rate with **₹83.96 Crores** in defaulted exposure. That alone is grounds for immediate contract suspension.
+- 5 of the top 7 blacklist candidates were **Institutes**, suggesting a systemic quality issue with that institution type.
+
+But there was also a positive outlier: **National Law Institute** had **0% defaults** despite processing over **10,000 loans**. My recommendation to the Partnership Director was — before suspending 13 bad partners, **study what National Law Institute is doing differently** in student screening and replicate it across the portfolio.
+
+> I prepared a legal-grade suspension justification for the top institution, including the threshold exceeded, total exposure, and post-suspension monitoring requirements."
 
 ### 🎯 Closing — Synthesis
 

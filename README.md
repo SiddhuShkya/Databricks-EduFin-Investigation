@@ -39,6 +39,7 @@ EduFin has flagged a critical anomaly in its loan portfolio. A federal complianc
 ├── research/              # Research materials and notes
 ├── resources/             # Business Requirements Document (BRD) and other docs
 ├── screenshots/           # Captured outputs and dashboard screenshots
+├── sql/                   # Final Dashboard Queries
 ├── submissions/           # Final query outputs and executive summaries per phase
 ├── workbooks/             # Reference workbooks and solution guides
 ├── final-presentation.md  # Final presentation of the project findings

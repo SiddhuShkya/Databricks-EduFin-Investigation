@@ -29,16 +29,20 @@ EduFin has flagged a critical anomaly in its loan portfolio. A federal complianc
 
 ## 📂 Repository Structure
 
-```
-├── datasets/          # Raw CSV data files (loans, customers, institutions, etc.)
-├── notebooks/         # Databricks notebooks for each phase of analysis
-├── submissions/       # Final query outputs and executive summaries per phase
-├── notes/             # Personal notes and learning reflections
-├── issues/            # Documented bugs, blockers, and resolutions
-├── workbooks/         # Reference workbooks and solution guides
-├── resources/         # Business Requirements Document (BRD) and other docs
-├── screenshots/       # Captured outputs and dashboard screenshots
-└── requirements.txt   # Python dependencies
+```text
+├── dashboards/            # Final dashboards for each analysis phase
+├── datasets/              # Raw CSV data files (loans, customers, institutions, etc.)
+├── dbc/                   # Databricks workspace and dataset archive files
+├── images/                # Images used in documentation
+├── issues/                # Documented bugs, blockers, and resolutions
+├── notebooks/             # Databricks notebooks for each phase of analysis
+├── research/              # Research materials and notes
+├── resources/             # Business Requirements Document (BRD) and other docs
+├── screenshots/           # Captured outputs and dashboard screenshots
+├── submissions/           # Final query outputs and executive summaries per phase
+├── workbooks/             # Reference workbooks and solution guides
+├── final-presentation.md  # Final presentation of the project findings
+└── requirements.txt       # Python dependencies
 ```
 
 ---

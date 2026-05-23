@@ -1,0 +1,51 @@
+Institution ID,Institution Name,Institution Type,Loans,Customers,Default Amount,Default Rate (%),Health Score,Partner Flag
+29,State Commerce Institute,Institute,10005,9501,83.96 Cr,20.87%,118.70,Blacklist
+33,Central Engineering Institute,Institute,9878,9420,83.5 Cr,20.75%,118.88,Blacklist
+34,Modern Management Institute,Institute,10165,9660,88.54 Cr,20.57%,119.15,Blacklist
+31,Regional Commerce University,University,9915,9433,85.99 Cr,20.56%,119.16,Blacklist
+30,National Engineering Institute,Institute,9889,9466,85.15 Cr,20.40%,119.40,Blacklist
+32,National Commerce Institute,Institute,9947,9489,82.81 Cr,20.39%,119.42,Blacklist
+50,Government Medical College,College,9780,9326,79.94 Cr,20.11%,119.84,Blacklist
+28,Regional Medical University,University,10134,9617,68.86 Cr,17.14%,124.29,Blacklist
+25,Central Commerce College,College,10009,9527,66.67 Cr,16.86%,124.71,Blacklist
+26,State Arts & Science University,University,10108,9640,68.38 Cr,16.69%,124.97,Blacklist
+24,Modern Law College,College,10151,9642,64.85 Cr,16.57%,125.15,Blacklist
+27,Central Management College,College,9984,9497,64.64 Cr,16.44%,125.34,Blacklist
+23,Advanced Technology University,University,10121,9602,63.76 Cr,16.32%,125.52,Blacklist
+36,Indian Arts & Science University,University,9897,9443,50.59 Cr,13.38%,129.93,Monitor
+49,Advanced Commerce University,University,9926,9436,48.64 Cr,13.21%,130.19,Monitor
+8,State Engineering Institute,Institute,9860,9387,47.59 Cr,13.18%,130.23,Monitor
+13,State Medical University,University,10259,9725,51.87 Cr,12.96%,130.56,Monitor
+38,Central Management College,College,10039,9525,50.51 Cr,12.88%,130.68,Monitor
+12,Central Commerce University,University,10082,9592,51.42 Cr,12.80%,130.80,Monitor
+21,Central Law University,University,9956,9487,49.09 Cr,12.79%,130.82,Monitor
+46,Regional Law College,College,9886,9385,47.21 Cr,12.68%,130.98,Monitor
+7,Indian Law University,University,10024,9549,49.63 Cr,12.67%,131.00,Monitor
+48,Central Commerce University,University,9916,9443,48.51 Cr,12.65%,131.03,Monitor
+4,Advanced Arts & Science College,College,10166,9654,49.19 Cr,12.61%,131.09,Monitor
+2,Central Law University,University,10107,9593,48.92 Cr,12.61%,131.09,Monitor
+40,Central Medical University,University,10043,9563,47.03 Cr,12.60%,131.10,Monitor
+15,Premier Management College,College,9793,9357,46.9 Cr,12.55%,131.18,Monitor
+20,State Law University,University,9988,9509,47.73 Cr,12.54%,131.19,Monitor
+5,Regional Law University,University,9903,9405,48.43 Cr,12.50%,131.25,Monitor
+22,Premier Technology University,University,9860,9386,46.99 Cr,12.49%,131.27,Monitor
+11,State Technology University,University,9993,9511,46.91 Cr,12.49%,131.27,Monitor
+44,Regional Arts & Science Institute,Institute,9994,9485,47.4 Cr,12.48%,131.28,Monitor
+41,Indian Technology College,College,10020,9544,48.33 Cr,12.45%,131.33,Monitor
+6,Advanced Commerce Institute,Institute,10096,9601,47.55 Cr,12.44%,131.34,Monitor
+47,Government Commerce University,University,10056,9590,46.48 Cr,12.43%,131.36,Monitor
+9,Government Medical University,University,9979,9489,45.65 Cr,12.37%,131.45,Monitor
+3,State Management University,University,10143,9645,47.35 Cr,12.36%,131.46,Monitor
+39,State Law College,College,10106,9594,47.24 Cr,12.33%,131.51,Monitor
+19,Central Technology Institute,Institute,10058,9581,46.82 Cr,12.31%,131.54,Monitor
+10,Government Management University,University,9997,9502,45.13 Cr,12.30%,131.55,Monitor
+18,Indian Technology Institute,Institute,9939,9469,47.41 Cr,12.28%,131.58,Monitor
+45,Regional Management University,University,9910,9396,47.44 Cr,12.21%,131.69,Monitor
+16,Indian Technology Institute,Institute,10004,9556,47.29 Cr,12.19%,131.72,Monitor
+14,Indian Technology University,University,10005,9504,48.56 Cr,12.18%,131.73,Monitor
+43,Premier Commerce College,College,9965,9459,46.11 Cr,12.03%,131.96,Monitor
+1,National Technology College,College,9962,9470,46.25 Cr,12.01%,131.99,Monitor
+35,Premier Law College,College,9932,9436,45.95 Cr,11.95%,132.08,Monitor
+37,Advanced Arts & Science College,College,10114,9634,46.65 Cr,11.82%,132.27,Monitor
+42,Advanced Commerce University,University,9910,9435,45.88 Cr,11.65%,132.53,Monitor
+17,National Law Institute,Institute,10026,9509,0.0 Cr,0.00%,150.00,Expand

@@ -1,0 +1,16 @@
+City,Loans,Customers,Portfolio Value,Defaulted Value,Default Rates (%),Exposure Score,Exposure Rank,Risk Quartile
+Ranchi,168,103,6.71 Cr,1.4 Cr,17.86%,24.97,1,Critical
+Pune,149,94,5.87 Cr,1.14 Cr,20.13%,22.95,2,Critical
+Lucknow,179,101,7.51 Cr,1.13 Cr,13.97%,15.85,5,Critical
+Mumbai,168,106,6.59 Cr,1.06 Cr,13.10%,13.94,10,Critical
+Ahmedabad,160,97,7.07 Cr,1.05 Cr,15.00%,15.71,6,Critical
+Indore,170,104,6.73 Cr,1.04 Cr,16.47%,17.07,3,Critical
+Jaipur,160,90,6.58 Cr,1.03 Cr,16.25%,16.71,4,Critical
+Kochi,165,105,6.67 Cr,1.0 Cr,15.15%,15.17,8,Critical
+Jammu,159,94,6.52 Cr,98.62 L,14.47%,14.27,9,High
+Rajkot,166,106,6.32 Cr,97.93 L,15.66%,15.34,7,High
+Bhopal,204,118,8.53 Cr,84.25 L,10.78%,9.08,14,High
+Nashik,135,86,5.62 Cr,83.66 L,14.07%,11.77,11,High
+Patna,183,114,7.77 Cr,83.61 L,9.29%,7.77,19,High
+Delhi,209,115,8.22 Cr,83.12 L,10.53%,8.75,15,High
+Nagpur,176,110,7.06 Cr,82.25 L,12.50%,10.28,12,High

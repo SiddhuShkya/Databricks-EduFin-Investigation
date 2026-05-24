@@ -4,7 +4,7 @@
 
 ---
 
-> "Good [morning/afternoon] everyone. I'm Siddhartha, and today I'll walk you through a crisis investigation I conducted for EduFin Capital — an education loan NBFC.
+> "Good afternoon everyone. I'm Siddhartha, and today I'll walk you through a crisis investigation I conducted for EduFin Capital — an education loan company.
 >
 > Here's the situation: EduFin discovered a **₹12 Crore discrepancy** in loan disbursements affecting over **15,000 student accounts** in just 6 months. A federal compliance audit is approaching, and the CEO needed board-ready answers within **48 hours**.
 >

@@ -3,5 +3,3 @@ pyspark
 pandas
 matplotlib
 seaborn
-submissions
-workbooks
